@@ -1,0 +1,11 @@
+module.exports.Token = require('./token.model');
+module.exports.User = require('./user.model');
+module.exports.OTP = require('./otp.model');
+module.exports.CronAudit = require('./cronAudit.model');
+module.exports.Transaction = require('./transaction.model');
+module.exports.Bank = require('./bank.model');
+module.exports.BulkProcessing = require('./bulkProcessing.model');
+module.exports.Topup = require('./topup.model');
+module.exports.Document = require('./document.model');
+module.exports.Ticket = require('./ticket.model');
+module.exports.QrCode = require('./qr-code.model');

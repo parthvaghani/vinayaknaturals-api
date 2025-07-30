@@ -1,0 +1,9 @@
+module.exports.authValidation = require('./auth.validation');
+module.exports.userValidation = require('./user.validation');
+module.exports.bankValidation = require('./bank.validation');
+module.exports.kycValidation = require('./kyc.validation');
+module.exports.paymentValidation = require('./payment.validation');
+module.exports.ticketValidation = require('./ticket.validation');
+module.exports.topupValidation = require('./topup.validation');
+module.exports.excelValidation = require('./excel.validation');
+module.exports.qrCodeValidation = require('./qr-code.validation');
