@@ -11,3 +11,5 @@ module.exports.topupService = require('./topup.service');
 module.exports.excelService = require('./excel.service');
 module.exports.payinService = require('./payin.service');
 module.exports.qrCodeService = require('./qr-code.service');
+module.exports.productService = require('./product.service');
+module.exports.productCategoryService = require('./productCategory.service');

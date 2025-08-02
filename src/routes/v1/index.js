@@ -13,6 +13,8 @@ const excelRoute = require('./export.excel.route');
 const qrCodeRoute = require('./qr-code.route');
 const config = require('../../config/config');
 const apiAccessKeyRoute = require('./api-access-key.route');
+const productCategoryRoute = require('./productCategory.routes');
+const productRoute = require('./product.routes');
 const router = express.Router();
 
 const defaultRoutes = [
@@ -63,6 +65,14 @@ const defaultRoutes = [
   {
     path: '/qr-code',
     route: qrCodeRoute,
+  },
+  {
+    path: '/categories',
+    route: productCategoryRoute,
+  },
+  {
+    path: '/products',
+    route: productRoute,
   },
 ];
 

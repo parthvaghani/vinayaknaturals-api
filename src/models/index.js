@@ -9,3 +9,5 @@ module.exports.Topup = require('./topup.model');
 module.exports.Document = require('./document.model');
 module.exports.Ticket = require('./ticket.model');
 module.exports.QrCode = require('./qr-code.model');
+module.exports.ProductCategory = require('./productCategory.model');
+module.exports.Product = require('./product.model');
