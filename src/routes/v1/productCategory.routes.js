@@ -4,9 +4,9 @@ const auth = require('../../middlewares/auth');
 const validation = require('../../validations/product.category.validation');
 const validate = require('../../middlewares/validate');
 
-router.get('/product-category', auth(), controller.getAll);
 router.post('/product-category', auth(), validate(validation.createCategory), controller.create);
-router.get('/product-category/:id', auth(), validate(validation.getCategoryById), controller.getById);
+router.get('/product-category', controller.getAll);
+router.get('/product-category/:id', validate(validation.getCategoryById), controller.getById);
 router.put('/product-category/:id', auth(), validate(validation.updateCategory), controller.update);
 router.delete('/product-category/:id', auth(), validate(validation.deleteCategory), controller.remove);
 module.exports = router;

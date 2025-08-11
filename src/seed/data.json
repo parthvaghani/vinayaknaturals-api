@@ -1,0 +1,999 @@
+{
+    "categories": [
+        {
+            "category": "pan-varieties",
+            "description": "A delightful range of Pan flavored mukhwas, from traditional wet pan to innovative coconut laddus.",
+            "heroImage": "https://aavkarmukhwas.github.io/images/categories/pan-varieties.png",
+            "name": "Pan Varieties",
+            "pricingEnabled": true,
+            "subCategories": [
+                {
+                    "benefits": [
+                        "Rich Source Of Fibers",
+                        "Rich Source Of Iron & Calcium",
+                        "Great Energy Booster",
+                        "Improves Brain Health",
+                        "Anti-ageing",
+                        "Maintain Skin & Bowel Health"
+                    ],
+                    "category": "shahi-khajur-pan",
+                    "description": "A royal treat made with premium dates (khajur) stuffed with a rich mukhwas blend.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/shahi-khajur-pan/product.png",
+                        "https://aavkarmukhwas.github.io/images/shahi-khajur-pan/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/shahi-khajur-pan/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Dates (Khajur)",
+                        "Betel Leaves",
+                        "Tutti Frutti",
+                        "Fennel Seeds",
+                        "Gulkand",
+                        "Coriender Seeds",
+                        "Dry",
+                        "Betel Sticks",
+                        "Coconut",
+                        "Powder",
+                        "Khajur Tukda"
+                    ],
+                    "isPremium": true,
+                    "name": "Shahi Khajur Pan",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 240
+                            },
+                            "500gm": {
+                                "price": 480
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 960
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Improves Digestion",
+                        "Good For Oral Health",
+                        "Good For Heart & Bone Health",
+                        "Promotes Skin Health"
+                    ],
+                    "category": "pan-coconut-ladoo",
+                    "description": "Deliciously moist laddus combining the flavors of pan and coconut for a delightful treat.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/pan-coconut-ladoo/product.png",
+                        "https://aavkarmukhwas.github.io/images/pan-coconut-ladoo/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/pan-coconut-ladoo/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Menthol",
+                        "Betel Leaves",
+                        "Tutti Frutti",
+                        "Fennel Seeds",
+                        "Gulkand",
+                        "Coriander Seeds",
+                        "Dry Coconuts"
+                    ],
+                    "isPremium": true,
+                    "name": "Pan Coconut Ladoo",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 210
+                            },
+                            "500gm": {
+                                "price": 420
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 840
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Relieves oral ulcer",
+                        "Natural laxative property",
+                        "Helpful in relieving cough",
+                        "Good For skin & healthy hair"
+                    ],
+                    "category": "chanothi-pan",
+                    "description": "A nutritious and crunchy mix of chanothi.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/chanothi-pan/product.png",
+                        "https://aavkarmukhwas.github.io/images/chanothi-pan/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/chanothi-pan/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Tutti Frutti",
+                        "Fennel Seeds",
+                        "Gulkand",
+                        "Coriander Seeds",
+                        "Dry Coconut Flacks",
+                        "Chanothi Leaves"
+                    ],
+                    "isPopular": true,
+                    "name": "Chanothi Pan",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 200
+                            },
+                            "500gm": {
+                                "price": 400
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 50,
+                                "price": 800
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Improves Digestion",
+                        "Good for Oral health",
+                        "Good for heart & Bone health",
+                        "Promotes Skin health"
+                    ],
+                    "category": "green-pan-mukhwas",
+                    "description": "A nutritious and crunchy mix of green pan.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/green-pan-mukhwas/product.png",
+                        "https://aavkarmukhwas.github.io/images/green-pan-mukhwas/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/green-pan-mukhwas/Ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Betel Sticks",
+                        "Navrang",
+                        "Supari Menthol",
+                        "Banaras",
+                        "Betel Leaves",
+                        "Tutti Frutti",
+                        "Calcutta Betel Leaves",
+                        "Fennel Seeds",
+                        "Gulkand",
+                        "Katha Powder",
+                        "Khajur Tukda",
+                        "Coriander Seeds"
+                    ],
+                    "isPopular": true,
+                    "name": "Green Pan Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 120
+                            },
+                            "500gm": {
+                                "price": 240
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 480
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Improves Digestions",
+                        "Good for Oral health",
+                        "Good for heart & Bone health",
+                        "Promotes Skin health",
+                        "Cherry is Rich source of vitamin- C"
+                    ],
+                    "category": "pan-cherry-mix",
+                    "description": "A nutritious and crunchy mix of pan cherry.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/pan-cherry/product.png"
+                    ],
+                    "ingredients": [
+                        "Betel Sticks",
+                        "Navrang",
+                        "Supari",
+                        "Menthol",
+                        "Banaras",
+                        "Leaves",
+                        "Tutti Frutti",
+                        "Calcutta",
+                        "Leaves",
+                        "Fennel Seeds",
+                        "Gulkand",
+                        "Katha Powder",
+                        "Khajur",
+                        "Tukda",
+                        "Coriander",
+                        "Seeds",
+                        "Cherry"
+                    ],
+                    "name": "Pan Cherry Mix",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 130
+                            },
+                            "500gm": {
+                                "price": 260
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 520
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "category": "regular-mukhwas",
+            "description": "A classic collection of everyday mukhwas featuring sesame, coconut, and traditional seeds.",
+            "heroImage": "https://aavkarmukhwas.github.io/images/categories/regular-mukhwas.png",
+            "name": "Regular Mukhwas",
+            "pricingEnabled": true,
+            "subCategories": [
+                {
+                    "benefits": [
+                        "Anti - Ageing Properties",
+                        "Boosts Digestion.",
+                        "Boosts Skin & Dental Health",
+                        "Good Source of Calcium",
+                        "Improves Bone Health"
+                    ],
+                    "category": "premium-til-mukhwas",
+                    "description": "A premium and flavorful til mix.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/premium-til/product.png",
+                        "https://aavkarmukhwas.github.io/images/premium-til/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/premium-til/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "White Til",
+                        "Rock Salt",
+                        "Turmeric",
+                        "Lemon Juice"
+                    ],
+                    "name": "Premium Til (Sesame Seed)",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 130
+                            },
+                            "500gm": {
+                                "price": 260
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 70,
+                                "price": 520
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Improves Digestion",
+                        "Rich in Healthy Fats",
+                        "Boosts Energy",
+                        "Enhances Skin & Hair Health",
+                        "Supports Immunity"
+                    ],
+                    "category": "suvadana-coconuts-toparu-mukhwas",
+                    "description": "A crunchy and flavorful mukhwas made from suvadana coconuts (toparu), perfect for refreshing taste after meals.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/suvadana-coconuts-toparu/product.png"
+                    ],
+                    "ingredients": [
+                        "Dry Coconut (Toparu)",
+                        "Sugar",
+                        "Fennel Seeds",
+                        "Cardamom",
+                        "Rock Salt"
+                    ],
+                    "name": "Suvadana Coconuts (Toparu) Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 240
+                            },
+                            "500gm": {
+                                "price": 480
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 960
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Full of Antioxidants",
+                        "Source of Vitamin-E, Vitamin-K",
+                        "Better for Oral Health"
+                    ],
+                    "category": "crunchy-til-coconut",
+                    "description": "A delicious and crunchy mix of sesame seeds (til) and coconut flakes.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/crunchy-til-coconut/product.png",
+                        "https://aavkarmukhwas.github.io/images/crunchy-til-coconut/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/crunchy-til-coconut/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Coated White Til",
+                        "Coconuts Flakes",
+                        "Coriander Seeds"
+                    ],
+                    "isPopular": true,
+                    "name": "Crunchy Til Coconut",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 160
+                            },
+                            "500gm": {
+                                "price": 320
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 640
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Aids in digestion",
+                        "Acts as a mouth freshener",
+                        "Visually appealing"
+                    ],
+                    "category": "coated-til-dhanadal",
+                    "description": "A colorful and flavorful mix of coated sesame seeds and roasted coriander seeds (dhanadal).",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/coated-til-dhanadal-mix/product.png"
+                    ],
+                    "ingredients": [
+                        "Sesame Seeds",
+                        "Coriander Seeds",
+                        "Turmeric",
+                        "Salt",
+                        "Sugar Coating"
+                    ],
+                    "name": "Coated Til Dhanadal Mix",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 150
+                            },
+                            "500gm": {
+                                "price": 300
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 50,
+                                "price": 600
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Rich source of omega 3 fatty acid",
+                        "Improves heart health",
+                        "Helps in providing good sleep",
+                        "Improves Immunity"
+                    ],
+                    "category": "seed-til-alsi",
+                    "description": "A healthy blend of various seeds including sesame (til) and flax seeds (alsi).",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/seed-tal-alsi/product.png",
+                        "https://aavkarmukhwas.github.io/images/seed-tal-alsi/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/seed-tal-alsi/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Pumpkin Seeds",
+                        "Melon Seeds",
+                        "Sunflower Seeds",
+                        "White Til",
+                        "Flax Seeds",
+                        "Turmeric - Salt"
+                    ],
+                    "isPopular": true,
+                    "name": "Seed Til Alsi",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 190
+                            },
+                            "500gm": {
+                                "price": 380
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 760
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Detoxification of body",
+                        "Improves digestion",
+                        "Rich source of omega 3 fatty acid - good cholesterol",
+                        "Source of calcium, fibers and minerals",
+                        "Good for hair, skin & heart"
+                    ],
+                    "category": "regular-mukhwas-mix",
+                    "description": "A classic and traditional mukhwas blend for everyday refreshment.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/regular-mukhwas/product.png",
+                        "https://aavkarmukhwas.github.io/images/regular-mukhwas/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/regular-mukhwas/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "White Til",
+                        "Fennel Seeds",
+                        "Rock Salt",
+                        "Coriander Seeds",
+                        "Flax Seeds",
+                        "Carom Seeds",
+                        "Dill Seed"
+                    ],
+                    "name": "Regular Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 140
+                            },
+                            "500gm": {
+                                "price": 280
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 560
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Sweet and satisfying",
+                        "Popular with all ages",
+                        "Colorful and fun"
+                    ],
+                    "category": "sweet-tinimini-dhanadal",
+                    "description": "A sweet and colorful mix of tiny sugar-coated fennel seeds (tinimini), sesame, and dhanadal.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/sweet-tinimini-til-dhanadal/product.png"
+                    ],
+                    "ingredients": [
+                        "Sugar-coated Fennel Seeds (Tinimini)",
+                        "Sesame Seeds",
+                        "Coriander Seeds (Dhanadal)"
+                    ],
+                    "name": "Sweet Tinimini Til Dhanadal",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 140
+                            },
+                            "500gm": {
+                                "price": 280
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 560
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Removes bad odour of mouth",
+                        "Rich in antioxidants & natural fibers",
+                        "Helps to Enhance Gut & Skin Health",
+                        "Helps to Regulates menstrual cycle"
+                    ],
+                    "category": "special-jaipuri-mukhwas",
+                    "description": "A royal mix of sweet and savory flavors.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/special-jaipuri-mukhwas/product.png",
+                        "https://aavkarmukhwas.github.io/images/special-jaipuri-mukhwas/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/special-jaipuri-mukhwas/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Tini Mini (Sweet Saunf)",
+                        "Coriander Seeds",
+                        "Coconut Flakes",
+                        "Dry Betel Stick"
+                    ],
+                    "name": "Special Jaipuri Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 150
+                            },
+                            "500gm": {
+                                "price": 300
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 50,
+                                "price": 600
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "category": "healthy-blends",
+            "description": "A collection of nutritious and wholesome blends featuring nuts, seeds, and berries.",
+            "heroImage": "https://aavkarmukhwas.github.io/images/categories/healthy-blends.png",
+            "name": "Healthy Blends",
+            "pricingEnabled": true,
+            "subCategories": [
+                {
+                    "benefits": [
+                        "Rich in healthy fats",
+                        "Good source of protein",
+                        "Provides sustained energy"
+                    ],
+                    "category": "roasted-nuts-coconut",
+                    "description": "A crunchy and savory mix of roasted nuts and toasted coconut.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/roasted-nuts-barries-mix/product.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-nuts-barries-mix/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-nuts-barries-mix/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Almonds",
+                        "Cashews",
+                        "Pistachios",
+                        "Coconut Flakes"
+                    ],
+                    "isPremium": true,
+                    "name": "Roasted Nuts Coconut",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 400
+                            },
+                            "500gm": {
+                                "price": 800
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 1600
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Rich source of omega 3 fatty acid",
+                        "Improves heart health",
+                        "Helps in providing good sleep",
+                        "Improves Immunity"
+                    ],
+                    "category": "roasted-seeds-dryfruits",
+                    "description": "A wholesome blend of roasted seeds and assorted dry fruits.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/product.png",
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Pumpkin Seeds",
+                        "Melon Seeds",
+                        "Sunflower Seeds",
+                        "White Til",
+                        "Flax Seeds",
+                        "Turmeric - Salt"
+                    ],
+                    "name": "Roasted Seeds & Dryfruits",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 360
+                            },
+                            "500gm": {
+                                "price": 720
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 1440
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Natural Laxative - full of Fibers",
+                        "Helpfull In Weight Reduction",
+                        "Helpful In Arthritis Pain",
+                        "Great Substitute of Milk In Nutrients",
+                        "Loaded With Antioxidants"
+                    ],
+                    "category": "chia-quinoa-berries",
+                    "description": "A superfood mix of chia seeds, quinoa, and antioxidant-rich berries.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/chia-quinoa-berries/product.png",
+                        "https://aavkarmukhwas.github.io/images/chia-quinoa-berries/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/chia-quinoa-berries/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Chia Seeds",
+                        "Quinoa Seeds",
+                        "Black Til",
+                        "Blueberry",
+                        "Cranberry",
+                        "Black Raisins"
+                    ],
+                    "isPremium": true,
+                    "name": "Chia Quinoa Berries",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 390
+                            },
+                            "500gm": {
+                                "price": 780
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 1560
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Immunity Booster",
+                        "Reduced Bad Cholesterol",
+                        "Full Of Omega 3 Fatty Acid",
+                        "Natural Source Of Fibers",
+                        "Rich Source Of Vitamin-C, B Complex, And Vitamin-E"
+                    ],
+                    "category": "multi-seeds-mix",
+                    "description": "A simple yet powerful mix of various seeds, packed with nutrients.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/multi-seeds/product.png",
+                        "https://aavkarmukhwas.github.io/images/multi-seeds/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/multi-seeds/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Melon Seeds",
+                        "Pumpkin Seeds",
+                        "Musk Melon Seeds",
+                        "Sunflower Seeds",
+                        "Black Salt"
+                    ],
+                    "name": "Multi Seeds",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 260
+                            },
+                            "500gm": {
+                                "price": 520
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 1040
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Immunity Booster",
+                        "Reduces Bad Cholesterol",
+                        "Helpful For Infertility Patients",
+                        "Natural Source Of Fibers",
+                        "Rich Source Of Vitamin -A. Good For Eye, Hair & Skin",
+                        "Helpfull In Sugar Level & Weight Management"
+                    ],
+                    "category": "seeds-dry-fruits",
+                    "description": "A nutritious and crunchy mix of seeds and dry fruits.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/product.png",
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/seeds-dry-fruit/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Pumpkin Seeds",
+                        "Walnuts",
+                        "Cashew Nuts",
+                        "Melon Seeds",
+                        "Sunflower Seeds",
+                        "Pistachio",
+                        "Almonds"
+                    ],
+                    "isPremium": true,
+                    "name": "Seeds Dry Fruits",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 360
+                            },
+                            "500gm": {
+                                "price": 720
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 1440
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Helps to Lower Cholesterol & Relieves hyperlipidemia & Obesity",
+                        "Protects Against Heart Diseases",
+                        "Richest Source of Omega 3 Fatty Acid",
+                        "Fights Cancer",
+                        "Rich In Dietary Fibers"
+                    ],
+                    "category": "roasted-alsi",
+                    "description": "A healthy and flavorful roasted flax seeds mix.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/roasted-alsi/product.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-alsi/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-alsi/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Flax Seeds",
+                        "Rock Salt",
+                        "Turmeric",
+                        "Lemon Juice"
+                    ],
+                    "isPopular": true,
+                    "name": "Roasted Alsi",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 110
+                            },
+                            "500gm": {
+                                "price": 220
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 40,
+                                "price": 440
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Full of Natural Fibers",
+                        "Improves Metabolism",
+                        "Maintain Body Weight",
+                        "Rich Source Of Minerals"
+                    ],
+                    "category": "roasted-green-wheat",
+                    "description": "A healthy and delicious roasted green wheat mix.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/roasted-green-wheat/product.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-green-wheat/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/roasted-green-wheat/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Green Wheat",
+                        "Black Salt",
+                        "Turmeric",
+                        "Rock Salt"
+                    ],
+                    "name": "Roasted Green Wheat Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 150
+                            },
+                            "500gm": {
+                                "price": 300
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 50,
+                                "price": 600
+                            }
+                        }
+                    }
+                },
+                {
+                    "benefits": [
+                        "Great Immunity Booster",
+                        "Excellent For Weight Loss",
+                        "Improves Good Cholestrol & Reduces Bad Cholesterol",
+                        "Improves Heamoglobin",
+                        "Best For Skin,bones And Hair Health"
+                    ],
+                    "category": "healthy-nuts-barries-mix",
+                    "description": "A nutritious and crunchy mix of healthy nuts and barries.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/healthy-nuts-barries-mix/product.png",
+                        "https://aavkarmukhwas.github.io/images/healthy-nuts-barries-mix/benefits.png",
+                        "https://aavkarmukhwas.github.io/images/healthy-nuts-barries-mix/ingredients.png"
+                    ],
+                    "ingredients": [
+                        "Hazelnuts",
+                        "Anjeer (Dried Fig)",
+                        "Black Raisin",
+                        "Sunflower seeds",
+                        "Walnuts",
+                        "Melon Seeds",
+                        "Green Raisin",
+                        "Flax Seeds",
+                        "Chia Seeds",
+                        "Pumpkin Seeds",
+                        "White Til",
+                        "Pistachio",
+                        "Blueberry",
+                        "Quinoa Seeds",
+                        "Cranberry",
+                        "Black Til",
+                        "Saffron"
+                    ],
+                    "isPremium": true,
+                    "name": "Healthy Nuts & Barries Mix",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 340
+                            },
+                            "500gm": {
+                                "price": 680
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 60,
+                                "price": 1360
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "category": "seasonal-varieties",
+            "description": "Special and delicious mukhwas varieties available during specific seasons.",
+            "heroImage": "https://aavkarmukhwas.github.io/images/categories/seasonal-varieties.png",
+            "name": "Seasonal Varieties",
+            "pricingEnabled": true,
+            "subCategories": [
+                {
+                    "benefits": [
+                        "Helps to improve blood quality",
+                        "One of the richest sources of Vitamin-C",
+                        "Helps to improve skin tone & removes toxins from blood"
+                    ],
+                    "category": "beet-root-amla",
+                    "description": "A seasonal delight rich in Vitamin-C, perfect for improving blood quality and skin tone.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/beet-amla/product.png"
+                    ],
+                    "ingredients": [
+                        "Beet Root",
+                        "Amla",
+                        "Jaggery Powder",
+                        "Black Salt"
+                    ],
+                    "isPremium": true,
+                    "name": "Beet Root Amla Mukhwas",
+                    "variants": {
+                        "gm": {
+                            "250gm": {
+                                "price": 500
+                            },
+                            "500gm": {
+                                "price": 1000
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "price": 2000
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "category": "healthy-powders",
+            "description": "A range of homemade healthy powders, packed with natural protein, vitamins, and minerals.",
+            "heroImage": "https://aavkarmukhwas.github.io/images/categories/healthy-powders.png",
+            "name": "Healthy Powders",
+            "pricingEnabled": true,
+            "subCategories": [
+                {
+                    "benefits": [
+                        "Full of natural proteins, vitamins minerals & antioxidants",
+                        "Specially beneficial for children, pregnant women, elders, housewives, gym workers",
+                        "Also works as an energy booster & immunity booster",
+                        "Helps to maintain weight",
+                        "Helps to develop muscles mass"
+                    ],
+                    "category": "home-made-natural-multivitamin-protien-powder",
+                    "description": "A nutritious and crunchy mix of home made natural multivitamin protien powder.",
+                    "images": [
+                        "https://aavkarmukhwas.github.io/images/multi-vitamin-powder/product.png"
+                    ],
+                    "ingredients": [
+                        "Almonds",
+                        "Makhana",
+                        "Pistachio",
+                        "Cashew nuts",
+                        "Chickpea dal",
+                        "Pumpkin seeds",
+                        "Melon seeds",
+                        "Sunflower seeds",
+                        "Walnuts",
+                        "sakkar"
+                    ],
+                    "name": "Home Made Natural Multivitamin Protien Powder",
+                    "variants": {
+                        "gm": {
+                            "200gm": {
+                                "price": 300
+                            }
+                        },
+                        "kg": {
+                            "1kg": {
+                                "discount": 50,
+                                "price": 1550
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "promotionalProducts": [],
+    "shippingConfig": {
+        "abroad": 200,
+        "inGujarat": 40,
+        "outsideGujarat": 80
+    },
+    "shippingEnabled": false
+}
