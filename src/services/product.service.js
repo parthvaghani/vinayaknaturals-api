@@ -1,5 +1,7 @@
 const Product = require('../models/product.model');
 
+const ProductCategory = require('../models/productCategory.model');
+
 const createProduct = async (data) => {
   try {
     return await Product.create(data);
@@ -8,9 +10,95 @@ const createProduct = async (data) => {
   }
 };
 
-const getAllProducts = async () => {
+const getAllProducts = async (query = {}) => {
   try {
-    return await Product.find().populate('category');
+    const {
+      page = 1,
+      limit = 10,
+      sortBy,
+      search = '',
+      category,
+      isPremium,
+      isPopular,
+    } = query;
+
+    const filter = {};
+    if (category) filter.category = category;
+    if (typeof isPremium !== 'undefined') filter.isPremium = isPremium;
+    if (typeof isPopular !== 'undefined') filter.isPopular = isPopular;
+
+    const options = {
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+    };
+
+    // support sortBy in format field:asc,field2:desc
+    if (sortBy) options.sortBy = sortBy;
+    options.populate = 'category';
+
+    // If the Product model had the paginate plugin, we could call Product.paginate
+    // Since it doesn't, we emulate pagination here.
+    const sort = (() => {
+      if (!options.sortBy) return { createdAt: -1 };
+      const sortObj = {};
+      const fields = String(options.sortBy).split(',');
+      for (const f of fields) {
+        const trimmed = f.trim();
+        if (!trimmed) continue;
+        if (trimmed.includes(':')) {
+          const [key, order] = trimmed.split(':');
+          sortObj[key] = order === 'asc' ? 1 : -1;
+        } else if (trimmed.startsWith('-')) {
+          sortObj[trimmed.substring(1)] = -1;
+        } else {
+          sortObj[trimmed] = 1;
+        }
+      }
+      return Object.keys(sortObj).length ? sortObj : { createdAt: -1 };
+    })();
+
+    const skip = (options.page - 1) * options.limit;
+
+    // Build search across relevant fields
+    let searchFilter = {};
+    if (search && String(search).trim() !== '') {
+      const regex = { $regex: String(search), $options: 'i' };
+      // find matching categories by name/description
+      const matchingCategories = await ProductCategory.find({
+        $or: [{ name: regex }, { description: regex }, { category: regex }],
+      }).select('_id');
+      const categoryIds = matchingCategories.map((c) => c._id);
+      searchFilter = {
+        $or: [
+          { name: regex },
+          { description: regex },
+          { ingredients: regex },
+          { benefits: regex },
+          ...(categoryIds.length ? [{ category: { $in: categoryIds } }] : []),
+        ],
+      };
+    }
+
+    const combined = { ...filter, ...searchFilter };
+
+    const [totalResults, results] = await Promise.all([
+      Product.countDocuments(combined),
+      Product.find(combined)
+        .populate('category')
+        .sort(sort)
+        .skip(skip)
+        .limit(options.limit),
+    ]);
+
+    const totalPages = Math.ceil(totalResults / options.limit);
+    return {
+      results,
+      currentResults: results.length,
+      page: options.page,
+      limit: options.limit,
+      totalPages,
+      totalResults,
+    };
   } catch (error) {
     throw error;
   }

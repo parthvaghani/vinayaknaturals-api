@@ -55,9 +55,20 @@ const deleteCategory = {
   }),
 };
 
+const getCategories = {
+  query: Joi.object().keys({
+    search: Joi.string().allow('').optional(),
+    page: Joi.number().integer().min(1).optional(),
+    limit: Joi.number().integer().min(1).max(100).optional(),
+    sortBy: Joi.string().optional(), // e.g. name:asc,createdAt:desc
+    pricingEnabled: Joi.boolean().optional(),
+  }),
+};
+
 module.exports = {
   createCategory,
   updateCategory,
   getCategoryById,
   deleteCategory,
+  getCategories,
 };

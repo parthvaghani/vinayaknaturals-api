@@ -14,7 +14,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const cats = await service.getAllCategories();
+    const cats = await service.getAllCategories(req.query);
     res.status(200).json({ message: 'Categories fetched successfully', data: cats });
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' });

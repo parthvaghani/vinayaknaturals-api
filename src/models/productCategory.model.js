@@ -6,6 +6,6 @@ const categorySchema = new mongoose.Schema({
   description: String,
   heroImage: String,
   pricingEnabled: { type: Boolean, default: true },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('ProductCategory', categorySchema);
