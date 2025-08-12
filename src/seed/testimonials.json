@@ -1,0 +1,81 @@
+{
+  "testimonials": {
+    "visible": true,
+    "data": [
+      {
+        "name": "Priyaben Trivedi",
+        "body": "We've been stocking mouth fresheners for our family shop in Rajkot since 2021. The beetroot amla variety is popular with health-conscious customers. Good margins and consistent supply.",
+        "img": "https://avatar.vercel.sh/priyaben",
+        "location": "Rajkot"
+      },
+      {
+        "name": "Kiransinh Patel",
+        "body": "As a distributor in Maninagar, I source directly from Surat suppliers. Their multi seeds mukhwas moves fast in our area. Professional dealing and they understand small business needs.",
+        "img": "https://avatar.vercel.sh/kiransinh",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Meera Singh",
+        "body": "Ordered samples first, then placed bulk order. The traditional jaiphal variety has good shelf life and customers like the authentic taste. Packaging protects well during transport.",
+        "img": "https://avatar.vercel.sh/meera",
+        "location": "Delhi"
+      },
+      {
+        "name": "Bhavesh Shah",
+        "body": "Running grocery store in Vastrapur since 10 years. Started stocking these products last year - the roasted varieties are gaining popularity. Reasonable wholesale rates from Surat.",
+        "img": "https://avatar.vercel.sh/bhavesh",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Dhavalbhai Modi",
+        "body": "Supply chain from Surat to Bopal is efficient. The makhana mix variety suits our customer base. They provide proper invoicing and GST documentation for our records.",
+        "img": "https://avatar.vercel.sh/dhavalbhai",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Hitesh Desai",
+        "body": "Being in same city, we get fresh stock regularly from local manufacturers. The roasted varieties with natural ingredients appeal to health-aware customers in our area.",
+        "img": "https://avatar.vercel.sh/hitesh",
+        "location": "Surat"
+      },
+      {
+        "name": "Jayaben Gohil",
+        "body": "Small pan shop in Satellite area. Basic fennel mukhwas has consistent taste and quality. Customers return for the same product regularly, which means good repeat business for us.",
+        "img": "https://avatar.vercel.sh/jayaben",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Manishbhai Joshi",
+        "body": "Trading in Navsari for many years. Tried sesame-based varieties - they move well in our local market. Rates are competitive compared to other Gujarat suppliers.",
+        "img": "https://avatar.vercel.sh/manishbhai",
+        "location": "Navsari"
+      },
+      {
+        "name": "Nilesh Thakkar",
+        "body": "Shop in Katargam area. Get fresh supplies and quick delivery from nearby production units. The coconut flakes variety works well for customers wanting something different.",
+        "img": "https://avatar.vercel.sh/nilesh",
+        "location": "Surat"
+      },
+      {
+        "name": "Ashaben Pandya",
+        "body": "Small retail outlet on CG Road. Mix varieties work well for gifting customers during festivals. Quality packaging makes products suitable for occasions. Decent profit margins.",
+        "img": "https://avatar.vercel.sh/ashaben",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Pankajbhai Raval",
+        "body": "Been in Paldi market for years. During winter months, jaggery-based varieties sell better to local customers. Surat production means fresher stock compared to distant suppliers.",
+        "img": "https://avatar.vercel.sh/pankajbhai",
+        "location": "Ahmedabad"
+      },
+      {
+        "name": "Dipika Shah",
+        "body": "Our Pal area shop serves office crowd. Cardamom variety is popular for after-lunch refreshment. Suppliers provide proper trade terms and payment flexibility for small retailers.",
+        "img": "https://avatar.vercel.sh/dipika",
+        "location": "Surat"
+      }
+    ]
+  }
+}
+
+

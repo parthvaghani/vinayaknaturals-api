@@ -3,3 +3,6 @@ module.exports.tokenService = require('./token.service');
 module.exports.userService = require('./user.service');
 module.exports.productService = require('./product.service');
 module.exports.productCategoryService = require('./productCategory.service');
+module.exports.testimonialService = require('./testimonial.service');
+module.exports.suggestedProductService = require('./suggestedProduct.service');
+module.exports.leadService = require('./lead.service');

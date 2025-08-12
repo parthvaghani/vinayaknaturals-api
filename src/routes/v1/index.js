@@ -5,6 +5,9 @@ const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 const productCategoryRoute = require('./productCategory.routes');
 const productRoute = require('./product.routes');
+const suggestedProductRoute = require('./suggestedProduct.routes');
+const testimonialRoute = require('./testimonial.routes');
+const leadRoute = require('./lead.routes');
 const router = express.Router();
 
 const defaultRoutes = [
@@ -23,6 +26,18 @@ const defaultRoutes = [
   {
     path: '/products',
     route: productRoute,
+  },
+  {
+    path: '/products',
+    route: suggestedProductRoute,
+  },
+  {
+    path: '/testimonials',
+    route: testimonialRoute,
+  },
+  {
+    path: '/leads',
+    route: leadRoute,
   },
 ];
 
