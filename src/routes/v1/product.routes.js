@@ -6,8 +6,8 @@ const controller = require('../../controllers/product.controller');
 
 
 router.post('/product', auth(), validate(validation.createProduct), controller.create);
-router.get('/product', validate(validation.getProducts), controller.getAll);
-router.get('/product/:id', validate(validation.getProductById), controller.getById);
+router.get('/product', auth(), controller.getAll);
+router.get('/product/:id', auth(), validate(validation.getProductById), controller.getById);
 router.put('/product/:id', auth(), validate(validation.updateProduct), controller.update);
 router.delete('/product/:id', auth(), validate(validation.deleteProduct), controller.remove);
 

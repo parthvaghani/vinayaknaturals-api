@@ -58,7 +58,6 @@ const createNewUser = async (userBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryUsers = async (filter, options, searchTerm, searchQuery) => {
-  options.populate = 'assignedPayinBank,assignedPayoutBank';
   const users = await User.paginate(filter, options, searchTerm, searchQuery);
   return users;
 };
@@ -69,7 +68,7 @@ const queryUsers = async (filter, options, searchTerm, searchQuery) => {
  * @returns {Promise<User>}
  */
 const getUserById = async (id) => {
-  const user = await User.findById(id).populate('assignedPayinBank').populate('assignedPayoutBank').select('-password');
+  const user = await User.findById(id).select('-password');
   return user;
 };
 
@@ -114,24 +113,24 @@ const updateUserProfileById = async (userId, updateBody) => {
     };
   }
 
-  // Handle availableBalance update
-  if (updateObject.availableBalance !== undefined) {
-    const currentBalance = user.availableBalance || 0;
-    const inputBalance = Number(updateObject.availableBalance);
+  // // Handle availableBalance update
+  // if (updateObject.availableBalance !== undefined) {
+  //   const currentBalance = user.availableBalance || 0;
+  //   const inputBalance = Number(updateObject.availableBalance);
 
-    // If negative balance would make total negative, throw error
-    if (inputBalance < 0 && Math.abs(inputBalance) > currentBalance) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance for this operation');
-    }
+  //   // If negative balance would make total negative, throw error
+  //   if (inputBalance < 0 && Math.abs(inputBalance) > currentBalance) {
+  //     throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance for this operation');
+  //   }
 
-    // Calculate the new balance (add the input value to current balance)
-    updateObject.availableBalance = currentBalance + inputBalance;
-  }
+  //   // Calculate the new balance (add the input value to current balance)
+  //   updateObject.availableBalance = currentBalance + inputBalance;
+  // }
 
-  // If admin and userType is being updated, only set default permissions if no custom permissions provided
-  if ((user.role === 'admin' || updateObject.role === 'admin') && updateObject.userType && !updateObject.permissions) {
-    updateObject.permissions = adminUserTypePermissions[updateObject.userType] || [];
-  }
+  // // If admin and userType is being updated, only set default permissions if no custom permissions provided
+  // if ((user.role === 'admin' || updateObject.role === 'admin') && updateObject.userType && !updateObject.permissions) {
+  //   updateObject.permissions = adminUserTypePermissions[updateObject.userType] || [];
+  // }
 
   // Use $set to only update the specified fields
   await User.findByIdAndUpdate(userId, { $set: updateObject }, { new: true });

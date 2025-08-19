@@ -92,39 +92,37 @@ const updateUser = catchAsync(async (req, res) => {
   const updateData = { ...req.body };
 
   // Initialize user_details as an empty object if it doesn't exist or isn't an object
-  if (!updateData.user_details || typeof updateData.user_details !== 'object') {
-    updateData.user_details = {};
-  }
+  // if (!updateData.user_details || typeof updateData.user_details !== 'object') {
+  //   updateData.user_details = {};
+  // }
 
-  // Map root level fields to user_details if they exist
-  const userDetailFields = ['name', 'country', 'city', 'zip', 'address', 'gender', 'phone', 'avatar'];
-  userDetailFields.forEach(field => {
-    if (req.body[field] !== undefined) {
-      updateData.user_details[field] = req.body[field];
-    }
-  });
+  // // Map root level fields to user_details if they exist
+  // const userDetailFields = ['name', 'country', 'city', 'zip', 'address', 'gender', 'phone', 'avatar'];
+  // userDetailFields.forEach(field => {
+  //   if (req.body[field] !== undefined) {
+  //     updateData.user_details[field] = req.body[field];
+  //   }
+  // });
 
-  // Clean up - remove root level fields that were moved to user_details
-  userDetailFields.forEach(field => {
-    if (field in updateData) {
-      delete updateData[field];
-    }
-  });
+  // // Clean up - remove root level fields that were moved to user_details
+  // userDetailFields.forEach(field => {
+  //   if (field in updateData) {
+  //     delete updateData[field];
+  //   }
+  // });
 
-  // Handle file upload if present
-  if (req.file) {
-    const imageUrl = await userService.uploadProfileImageS3(userId, req.file, 'profile-images');
-    updateData.user_details = updateData.user_details || {};
-    updateData.user_details.avatar = imageUrl;
-  }
+  // // Handle file upload if present
+  // if (req.file) {
+  //   const imageUrl = await userService.uploadProfileImageS3(userId, req.file, 'profile-images');
+  //   updateData.user_details = updateData.user_details || {};
+  //   updateData.user_details.avatar = imageUrl;
+  // }
 
   const updatedUser = await userService.updateUserProfileById(userId, updateData);
-  const { ...userWithoutPassword } = updatedUser._doc;
 
-  res.send({
-    success: true,
-    user: userWithoutPassword,
+  res.status(200).json({
     message: 'User updated successfully',
+    data:true
   });
 });
 

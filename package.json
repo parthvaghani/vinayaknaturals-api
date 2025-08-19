@@ -1,6 +1,6 @@
 {
-  "name": "finflex-api",
-  "version": "1.7.0",
+  "name": "aavkarmukhwas-api",
+  "version": "1.0.0",
   "bin": "bin/createNodejsApp.js",
   "main": "src/index.js",
   "author": "ripplestacks",

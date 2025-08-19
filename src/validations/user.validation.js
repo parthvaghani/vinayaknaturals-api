@@ -4,7 +4,7 @@ const { objectId, password } = require('./custom.validation');
 const createUser = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
-    businessName: Joi.string().required().trim(),
+    // businessName: Joi.string().required().trim(),
     phoneNumber: Joi.string()
       .pattern(/^\+[1-9]\d{1,14}$/)
       .required()
@@ -18,17 +18,9 @@ const createUser = {
     user_details: Joi.object({
       name: Joi.string().required().trim(),
       country: Joi.string().required().trim(),
-      gender: Joi.string().required().valid('Male', 'Female', 'Other'),
     }).required(),
     role: Joi.string().valid('user', 'admin').default('user'),
     acceptedTerms: Joi.boolean().default(false),
-    availableBalance: Joi.number().default(0),
-    isActive: Joi.boolean().default(true),
-    commissionConfig: Joi.object({
-      startRange: Joi.number().min(0),
-      endRange: Joi.number().min(0),
-      value: Joi.number().min(0),
-    }),
   }),
 };
 
@@ -84,40 +76,41 @@ const updateUser = {
     userId: Joi.required().custom(objectId),
   }),
   body: Joi.object({
-    name: Joi.string().trim().allow('').optional(),
-    country: Joi.string().trim().allow('').optional(),
-    city: Joi.string().trim().allow('').optional(),
-    zip: Joi.string().trim().allow('').optional(),
-    address: Joi.string().trim().allow('').optional(),
-    gender: Joi.string().valid('Male', 'Female', 'Other', '').allow('').optional(),
-    phone: Joi.string().trim().allow('').optional(),
-    joiningDate: Joi.date().allow(null).optional(),
-    twoFAEnabled: Joi.boolean().optional(),
-    twoFASecret: Joi.string().allow('').optional(),
+    // city: Joi.string().trim().allow('').optional(),
+    // zip: Joi.string().trim().allow('').optional(),
+    // address: Joi.string().trim().allow('').optional(),
+    // gender: Joi.string().valid('Male', 'Female', 'Other', '').allow('').optional(),
+    // phone: Joi.string().trim().allow('').optional(),
+    // joiningDate: Joi.date().allow(null).optional(),
+    // twoFAEnabled: Joi.boolean().optional(),
+    // twoFASecret: Joi.string().allow('').optional(),
 
-    businessName: Joi.string().trim().optional(),
-    email: Joi.string().trim().lowercase().email().optional(),
+    // businessName: Joi.string().trim().optional(),
+    // email: Joi.string().trim().lowercase().email().optional(),
     phoneNumber: Joi.string()
       .trim()
       .pattern(/^\+[1-9]\d{1,14}$/)
       .message('Invalid international phone number')
       .optional(),
 
-    user_details: Joi.any().optional(),
+    user_details: Joi.object({
+      name: Joi.string().trim().allow('').optional(),
+      country: Joi.string().trim().allow('').optional(),
+    }),
 
-    isActive: Joi.boolean().optional(),
-    availableBalance: Joi.number().optional(),
-    role: Joi.string().valid('user', 'admin').optional(),
-    userType: Joi.string().valid('super_admin', 'finance_admin', 'support_admin', 'view_only_admin').optional(),
-    permissions: Joi.array().items(Joi.string()).optional(),
-    commissionConfig: Joi.object({
-      commissionType: Joi.string().valid('payin', 'payout').optional(),
-      startRange: Joi.number().min(0).optional(),
-      endRange: Joi.number().min(0).optional(),
-      chargeType: Joi.string().valid('percentage', 'fixed').optional(),
-      value: Joi.number().min(0).optional(),
-    })
-      .optional(),
+    // isActive: Joi.boolean().optional(),
+    // availableBalance: Joi.number().optional(),
+    // role: Joi.string().valid('user', 'admin').optional(),
+    // userType: Joi.string().valid('super_admin', 'finance_admin', 'support_admin', 'view_only_admin').optional(),
+    // permissions: Joi.array().items(Joi.string()).optional(),
+    // commissionConfig: Joi.object({
+    //   commissionType: Joi.string().valid('payin', 'payout').optional(),
+    //   startRange: Joi.number().min(0).optional(),
+    //   endRange: Joi.number().min(0).optional(),
+    //   chargeType: Joi.string().valid('percentage', 'fixed').optional(),
+    //   value: Joi.number().min(0).optional(),
+    // })
+    //   .optional(),
   })
     .min(1)
     .messages({

@@ -70,10 +70,6 @@ const userSchema = mongoose.Schema(
           return `${config.aws.baseUrl}${v}`;
         },
       },
-      gender: {
-        type: String,
-        enum: ['Male', 'Female', 'Other'],
-      },
     },
     acceptedTerms: {
       type: Boolean,
@@ -91,121 +87,6 @@ const userSchema = mongoose.Schema(
     profileCompleted: {
       type: Boolean,
       default: false,
-    },
-    userType: {
-      type: String,
-      enum: ['super_admin', 'finance_admin', 'support_admin', 'view_only_admin'],
-      default: null,
-    },
-    // Admin permissions (only for admin role)
-    permissions: {
-      type: [String],
-      default: [],
-    },
-    availableBalance: {
-      type: Number,
-      default: 0,
-    },
-    pgBalance: {
-      type: Number,
-      default: 0,
-    },
-    assignedPayinBank: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Bank',
-    },
-    assignedPayoutBank: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Bank',
-    },
-    commissionConfig: {
-      payin: {
-        startRange: {
-          type: Number,
-          default: 0,
-          min: 0,
-        },
-        endRange: {
-          type: Number,
-          default: 0,
-          min: 0,
-        },
-        chargeType: {
-          type: String,
-          enum: ['percentage', 'fixed'],
-          default: 'percentage',
-        },
-        value: {
-          type: Number,
-          default: 5,
-          min: 0,
-        },
-      },
-      payout: {
-        startRange: {
-          type: Number,
-          default: 0,
-          min: 0,
-        },
-        endRange: {
-          type: Number,
-          default: 0,
-          min: 0,
-        },
-        chargeType: {
-          type: String,
-          enum: ['percentage', 'fixed'],
-          default: 'percentage',
-        },
-        value: {
-          type: Number,
-          default: 5,
-          min: 0,
-        },
-      },
-    },
-    finflexKeys: {
-      test: {
-        accessKey: {
-          type: String,
-        },
-        merchantKey: {
-          type: String,
-        },
-        clientId: {
-          type: String,
-        },
-        apiPassword: {
-          type: String,
-        },
-      },
-      live: {
-        accessKey: {
-          type: String,
-        },
-        merchantKey: {
-          type: String,
-        },
-        clientId: {
-          type: String,
-        },
-        apiPassword: {
-          type: String,
-        },
-      },
-    },
-    // 2FA fields
-    twoFASecret: {
-      type: String,
-      default: null,
-    },
-    twoFAEnabled: {
-      type: Boolean,
-      default: false,
-    },
-    twoFAExpiresAt: {
-      type: Date,
-      default: null,
     },
   },
   {

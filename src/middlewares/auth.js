@@ -42,7 +42,7 @@ const verifyCallback = (req, resolve, reject, requiredRights) => async (decoded)
       const isSameUser = req.params?.userId === user.id.toString();
 
       // Allow if user has rights and is accessing their own resource, or if user is admin
-      if (!hasRequiredRights || (user.role !== 'admin' && !isSameUser)) {
+      if (!hasRequiredRights && user.role !== 'admin') {
         logger.error(`User ${user.id} lacks required rights: ${requiredRights.join(', ')}`);
         return reject(new ApiError(httpStatus.FORBIDDEN, 'Insufficient permissions'));
       }

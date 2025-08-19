@@ -1,10 +1,39 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
+const validate = require('../../middlewares/validate');
+const userValidation = require('../../validations/user.validation');
 const userController = require('../../controllers/user.controller');
+const { upload } = require('../../Helpers/multer');
+const { getAdminMeta } = require('../../controllers/user.controller');
 
 const router = express.Router();
 
+// Root routes
+router
+  .route('/')
+  .post(auth('manageUsers'), validate(userValidation.createUser), userController.createUser)
+  .get(auth('getUsers'), validate(userValidation.getUsers), userController.getUsers);
+
+// Specific routes (no parameters)
 router.route('/me').get(auth(), userController.getMe);
+
+// User ID based routes
+router
+  .route('/:userId')
+  .get(auth('getUser'), validate(userValidation.getUser), userController.getUser)
+  .patch(
+    auth(),
+    upload.single('avatar'),
+    validate(userValidation.updateUser),
+    userController.updateUser
+  )
+  .delete(auth('manageUsers'), validate(userValidation.deleteUser), userController.deleteUser);
+
+router.route('/:userId/clearDeviceToken').patch(validate(userValidation.deleteUser), userController.clearToken);
+
+router
+  .route('/add-admin')
+  .post(auth('manageUsers'), validate(userValidation.createAdmin), userController.createUser);
 
 module.exports = router;
 

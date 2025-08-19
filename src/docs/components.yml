@@ -1,5 +1,23 @@
 components:
   schemas:
+    AddressInput:
+      type: object
+      properties:
+        label:
+          type: string
+          enum: [Home, Office, Other]
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        country:
+          type: string
     User:
       type: object
       properties:
@@ -193,6 +211,39 @@ components:
           $ref: '#/components/schemas/Token'
         refresh:
           $ref: '#/components/schemas/Token'
+
+    Cart:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Cart item id
+        productId:
+          type: string
+          description: Product id
+        userId:
+          type: string
+          description: User id
+        totalProduct:
+          type: number
+          description: Quantity of this product in cart
+        weight:
+          type: string
+          description: Selected product weight/variant (e.g., '250gm' or '1kg')
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      example:
+        id: 66b1a4f6d5d3c3a1b2c4d6e8
+        productId: 66b1a4f6d5d3c3a1b2c4d6e7
+        userId: 66b1a4f6d5d3c3a1b2c4d6e6
+        totalProduct: 2
+        weight: "250gm"
+        createdAt: 2025-08-10T12:00:00.000Z
+        updatedAt: 2025-08-10T12:00:00.000Z
 
     Error:
       type: object

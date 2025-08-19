@@ -6,3 +6,5 @@ module.exports.productCategoryService = require('./productCategory.service');
 module.exports.testimonialService = require('./testimonial.service');
 module.exports.suggestedProductService = require('./suggestedProduct.service');
 module.exports.leadService = require('./lead.service');
+module.exports.cartService = require('./cart.service');
+module.exports.addressService = require('./address.service');

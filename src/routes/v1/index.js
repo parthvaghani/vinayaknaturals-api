@@ -8,6 +8,9 @@ const productRoute = require('./product.routes');
 const suggestedProductRoute = require('./suggestedProduct.routes');
 const testimonialRoute = require('./testimonial.routes');
 const leadRoute = require('./lead.routes');
+const cartRoute = require('./cart.route');
+const addressRoute = require('./address.routes');
+const orderRoute = require('./order.routes');
 const router = express.Router();
 
 const defaultRoutes = [
@@ -39,6 +42,20 @@ const defaultRoutes = [
     path: '/leads',
     route: leadRoute,
   },
+  {
+    path: '/cart',
+    route: cartRoute,
+  }
+  ,
+  {
+    path: '/addresses',
+    route: addressRoute,
+  }
+  ,
+  {
+    path: '/orders',
+    route: orderRoute,
+  }
 ];
 
 const devRoutes = [
