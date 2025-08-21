@@ -1,3 +1,4 @@
+const { response } = require('express');
 const cartModel = require('../models/cart.model');
 
 
@@ -21,16 +22,17 @@ const getCartByDetails = async (payload) => {
   });
   return cartItem;
 };
-
-const updateCart = async (_id, totalProduct, weight, weightVariant) => {
-  let data;
-  if (weight) {
-    data = await cartModel.updateOne({_id: _id}, {weight:weight, weightVariant:weightVariant});
+const updateCart = async (_id, updateData) => {
+  try {
+    return await cartModel.findByIdAndUpdate(
+      _id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+  } catch (error) {
+    response.error('Error updating cart:', error.message);
+    return null;
   }
-  else {
-    data = await cartModel.updateOne({_id: _id}, {totalProduct:totalProduct});
-  }
-  return data;
 };
 
 const getCartById = async (cartId, userId) => {
