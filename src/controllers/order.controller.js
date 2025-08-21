@@ -45,11 +45,18 @@ const cancelOrder = catchAsync(async (req, res) => {
   return res.status(200).json({ success: true, message: 'Order canceled successfully', data: updated });
 });
 
+const updateStatus = catchAsync(async (req, res) => {
+  const { status, note } = req.body;
+  const updated = await service.updateOrderStatus(req.params.id, status, note, req.user.role);
+  return res.status(200).json({ success: true, message: 'Order status updated successfully', data: updated });
+});
+
 module.exports = {
   getAllOrders,
   createOrder,
   getMyOrders,
   getOrderById,
   cancelOrder,
+  updateStatus,
 };
 

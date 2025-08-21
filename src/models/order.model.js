@@ -70,6 +70,28 @@ const orderSchema = new mongoose.Schema({
     enum: ['placed', 'accepted', 'inprogress', 'completed', 'cancelled', 'delivered'],
     default: 'placed'
   },
+  statusHistory: [
+    {
+      status: {
+        type: String,
+        enum: ['placed', 'accepted', 'inprogress', 'completed', 'cancelled', 'delivered'],
+        required: true
+      },
+      note: {
+        type: String,
+        default: null
+      },
+      updatedBy: {
+        type: String,
+        enum: ['user', 'admin', 'system'],
+        default: 'system'
+      },
+      date: {
+        type: Date,
+        default: Date.now
+      }
+    }
+  ],
   cancelDetails: {
     reason: {
       type: String,

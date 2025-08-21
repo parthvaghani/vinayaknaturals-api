@@ -35,10 +35,19 @@ const getAllOrders = {
   }),
 };
 
+const updateStatus = {
+  params: orderIdParam,
+  body: Joi.object().keys({
+    status: Joi.string().valid('placed', 'accepted', 'inprogress', 'completed', 'cancelled', 'delivered').required(),
+    note: Joi.string().allow('', null),
+  }),
+};
+
 module.exports = {
   createOrder,
   getOrderById,
   cancelOrder,
   getAllOrders,
+  updateStatus,
 };
 

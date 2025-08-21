@@ -102,4 +102,5 @@ module.exports = {
   },
   isServerless: envVars.IS_SERVERLESS,
   frontEndBaseUrl: envVars.FRONT_END_BASE_URL,
+  sellerRecipients: envVars.SELLER_RECIPIENTS ? envVars.SELLER_RECIPIENTS.split(',').map((email) => email.trim()) : [],
 };

@@ -2,6 +2,8 @@ const Order = require('../models/order.model');
 const Address = require('../models/address.model');
 const Cart = require('../models/cart.model');
 const User = require('../models/user.model');
+const { emailService } = require('./index');
+const mongoose = require('mongoose');
 
 /**
  * Get all orders with pagination, filtering and search (admin use)
@@ -62,18 +64,24 @@ const getAllOrders = async (query = {}) => {
 
     let searchFilter = {};
     if (search && String(search).trim() !== '') {
-      const regex = { $regex: String(search), $options: 'i' };
-      searchFilter = {
-        $or: [
-          { phoneNumber: regex },
-          { status: regex },
-          { 'address.addressLine1': regex },
-          { 'address.addressLine2': regex },
-          { 'address.city': regex },
-          { 'address.state': regex },
-          { 'address.zip': regex },
-        ],
-      };
+      const term = String(search).trim();
+      const regex = { $regex: term, $options: 'i' };
+      const orConditions = [
+        { phoneNumber: regex },
+        { status: regex },
+        { 'cancelDetails.reason': regex },
+        { 'address.addressLine1': regex },
+        { 'address.addressLine2': regex },
+        { 'address.city': regex },
+        { 'address.state': regex },
+        { 'address.zip': regex },
+      ];
+
+      if (mongoose.Types.ObjectId.isValid(term)) {
+        orConditions.unshift({ _id: new mongoose.Types.ObjectId(term) });
+      }
+
+      searchFilter = { $or: orConditions };
     }
 
     const combined = { ...filter, ...searchFilter };
@@ -164,10 +172,32 @@ const createOrderFromCart = async ({ userId, addressId }) => {
     },
     productsDetails,
     phoneNumber,
+    statusHistory: [
+      { status: 'placed', updatedBy: 'user', note: 'Order placed' }
+    ],
   });
 
   await Cart.updateMany({ userId, isOrdered: false }, { $set: { isOrdered: true } });
 
+  try {
+    // Populate for email templates (product names)
+    const populatedOrder = await Order.findById(orderDoc._id)
+      .populate({ path: 'productsDetails.productId', select: 'name' })
+      .lean();
+
+    // Fetch buyer details
+    const buyer = await User.findById(userId).select('email user_details.name').lean();
+    const buyerEmail = buyer && buyer.email ? buyer.email : null;
+    const buyerName = buyer && buyer.user_details && buyer.user_details.name ? buyer.user_details.name : '';
+
+    // Send emails in parallel (non-blocking)
+    await Promise.allSettled([
+      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName),
+      emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName),
+    ]);
+  } catch (error) {
+    return error;
+  }
   return orderDoc;
 };
 
@@ -195,9 +225,78 @@ const cancelOrder = async (id, userId, reason, role) => {
   const filter = role === 'admin' ? { _id: id } : { _id: id, userId };
   return Order.findOneAndUpdate(
     filter,
-    { $set: { status: 'cancelled', 'cancelDetails.reason': reason || null, 'cancelDetails.canceledBy': role === 'admin' ? 'admin' : 'user', 'cancelDetails.date': Date.now() } },
+    {
+      $set: {
+        status: 'cancelled',
+        'cancelDetails.reason': reason || null,
+        'cancelDetails.canceledBy': role === 'admin' ? 'admin' : 'user',
+        'cancelDetails.date': Date.now(),
+      },
+      $push: {
+        statusHistory: {
+          status: 'cancelled',
+          updatedBy: role === 'admin' ? 'admin' : 'user',
+          note: reason || null,
+          date: new Date(),
+        },
+      },
+    },
     { new: true }
   );
+};
+
+const allowedTransitions = {
+  placed: ['accepted', 'cancelled'],
+  accepted: ['inprogress', 'cancelled'],
+  inprogress: ['completed'],
+  completed: ['delivered'],
+  delivered: [],
+  cancelled: [],
+};
+
+const updateOrderStatus = async (id, newStatus, note, role) => {
+  // Only admin can update status (except cancel which has separate flow)
+  if (role !== 'admin') {
+    const error = new Error('Forbidden');
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const order = await Order.findById(id);
+  if (!order) {
+    const error = new Error('Order not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const current = order.status;
+  // Idempotent: if status is same, optionally append note and return
+  if (current === newStatus) {
+    if (note && note !== '') {
+      order.statusHistory.push({ status: newStatus, updatedBy: 'admin', note: note || null, date: new Date() });
+      await order.save();
+    }
+    await order.populate([
+      { path: 'userId', select: 'email phoneNumber role user_details' },
+      { path: 'productsDetails.productId', select: 'name price images' },
+    ]);
+    return order;
+  }
+  const allowed = allowedTransitions[current] || [];
+  if (!allowed.includes(newStatus)) {
+    const error = new Error(`Invalid status transition from ${current} to ${newStatus}`);
+    error.statusCode = 400;
+    throw error;
+  }
+
+  order.status = newStatus;
+  order.statusHistory.push({ status: newStatus, updatedBy: 'admin', note: note || null, date: new Date() });
+  await order.save();
+  await order.populate([
+    { path: 'userId', select: 'email phoneNumber role user_details' },
+    { path: 'productsDetails.productId', select: 'name price images' },
+  ]);
+  return order;
 };
 
 module.exports = {
@@ -206,5 +305,6 @@ module.exports = {
   getOrdersByUser,
   getOrderById,
   cancelOrder,
+  updateOrderStatus,
 };
 
