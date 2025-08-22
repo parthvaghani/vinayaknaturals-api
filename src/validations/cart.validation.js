@@ -5,7 +5,8 @@ const addToCart = {
   body: Joi.object().keys({
     productId: Joi.string().custom(objectId).required(),
     totalProduct: Joi.number().required(),
-    weight: Joi.string().trim().required()
+    weight: Joi.string().trim().required(),
+    weightVariant: Joi.string().valid('gm', 'kg').required(),
   }),
 };
 
@@ -14,6 +15,7 @@ const updateCart = {
     action: Joi.string().valid('increment', 'decrement', 'weight').required(),
     cartId: Joi.string().custom(objectId).required(),
     weight: Joi.string().optional().allow(''), // allows empty string
+    weightVariant: Joi.string().valid('gm', 'kg').optional(),
   }),
 };
 
@@ -27,8 +29,22 @@ const deleteCart = {
   }),
 };
 
+const userLocalStorageCart = {
+  body: Joi.object().keys({
+    cart: Joi.array().items(
+      Joi.object().keys({
+        productId: Joi.string().custom(objectId).required(),
+        weight: Joi.number().required(),
+        weightVariant: Joi.string().valid('gm', 'kg').required(),
+        totalProduct: Joi.number().required(),
+      })
+    ).required(),
+  }),
+};
+
 module.exports = {
   addToCart,
   updateCart,
   deleteCart,
+  userLocalStorageCart
 };

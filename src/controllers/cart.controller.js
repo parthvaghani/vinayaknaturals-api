@@ -24,44 +24,42 @@ const addToCart = catchAsync(async (req, res) => {
   const user = req.user;
   const product = await getProductById(req.body.productId);
 
-  let variantLabel = '';
-  let variantId = '';
-  const weightInput = req.body.weight;
-  if (product && product.variants) {
-    for (const type of ['gm', 'kg']) {
-      const arr = product.variants[type];
-      if (Array.isArray(arr)) {
-        const found = arr.find(v => v.weight === weightInput);
-        if (found) {
-          variantLabel = type;
-          variantId = found._id;
-          break;
-        }
-      }
-    }
-  }
+  // let variantLabel = '';
+  // let variantId = '';
+  // const weightInput = req.body.weight;
+  // if (product && product.variants) {
+  //   for (const type of ['gm', 'kg']) {
+  //     const arr = product.variants[type];
+  //     if (Array.isArray(arr)) {
+  //       const found = arr.find(v => v.weight === weightInput);
+  //       if (found) {
+  //         variantLabel = type;
+  //         variantId = found._id;
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
 
-  if (!variantLabel || !variantId) {
-    return res.status(400).json({
-      success: false,
-      message: 'Variant not found for the given weight'
-    });
-  }
+  // if (!variantLabel || !variantId) {
+  //   return res.status(400).json({
+  //     success: false,
+  //     message: 'Variant not found for the given weight'
+  //   });
+  // }
 
   const dataPayload = {
     userId: user?._id,
     productId: req.body.productId,
     totalProduct: req.body.totalProduct || 1,
-    weight: weightInput,
-    weightVariant: variantLabel,
-    variantId: variantId,
+    weight:  req.body.weight,
+    weightVariant: req.body.weightVariant
   };
 
   const existingCart = await service.getCartByDetails({
     userId: dataPayload.userId,
     productId: dataPayload.productId,
-    weight: dataPayload.weight,
-    variantId: dataPayload.variantId,
+    weight: dataPayload.weight
   });
 
   if (existingCart) {
@@ -70,7 +68,8 @@ const addToCart = catchAsync(async (req, res) => {
     if (updatedData.modifiedCount === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Something Went Wrong In Add Product To Cart'
+        message: 'Something Went Wrong In Add Product To Cart',
+        productId: existingCart._id.toString()
       });
     }
     return res.status(200).json({
@@ -87,7 +86,8 @@ const addToCart = catchAsync(async (req, res) => {
     }
     return res.status(200).json({
       success: true,
-      message: 'Product has been added to your cart'
+      message: 'Product has been added to your cart',
+      productId: data._id.toString()
     });
   }
 });
@@ -95,7 +95,7 @@ const addToCart = catchAsync(async (req, res) => {
 // Update cart: handles weight, increment, decrement
 const updateCart = catchAsync(async (req, res) => {
   const user = req.user;
-  const { cartId, action, weight } = req.body;
+  const { cartId, action, weight, weightVariant } = req.body;
 
   const cartItem = await service.getCartById(cartId, user?._id);
   if (!cartItem) {
@@ -110,34 +110,16 @@ const updateCart = catchAsync(async (req, res) => {
 
   switch (action) {
     case 'weight': {
-      const product = await getProductById(cartItem.productId);
-
-      let selectedVariant = null;
-      let variantLabel = '';
-
-      // 🔹 Search in gm and kg separately so we know the label
-      for (const type of ['gm', 'kg']) {
-        const arr = product?.variants?.[type] || [];
-        const found = arr.find(v => v.weight === weight);
-        if (found) {
-          selectedVariant = found;
-          variantLabel = type; // ✅ gm or kg
-          break;
-        }
-      }
-
-      if (!selectedVariant) {
+      if (!weightVariant) {
         return res.status(400).json({
           success: false,
-          message: 'Variant not found for the given weight'
+          message: 'Variant not found.'
         });
       }
 
       updatedData = await service.updateCart(cartItem._id, {
-        weight: selectedVariant.weight,
-        variantId: selectedVariant._id,
-        weightVariant: variantLabel,       // ✅ now always "gm" or "kg"
-        price: selectedVariant.price       // ✅ also update price
+        weight: weight,
+        weightVariant: weightVariant,
       });
 
       message = 'Product variant updated successfully';
@@ -217,9 +199,58 @@ const remove = catchAsync(async (req, res) => {
   });
 });
 
+const userLocalStorageCart = catchAsync(async (req, res) => {
+  const user = req.user;
+  const cartData = req.body.cart;
+
+  // Get all existing cart items for the user
+  const getAllCartItems = await service.getUserCart(user?._id);
+
+  // Clear existing cart items
+  if (getAllCartItems.length && cartData.length > 0) {
+    for (const item of getAllCartItems) {
+      await service.deleteCartById(item._id, user._id);
+    }
+  }
+
+  const createdCartItems = [];
+
+  // Add new cart items and collect the created items
+  if (cartData.length > 0) {
+    for (const item of cartData) {
+      const createdItem = await service.addToCart({
+        userId: user._id,
+        productId: item.productId,
+        weight: item.weight,
+        weightVariant: item.weightVariant,
+        totalProduct: item.totalProduct
+      });
+
+      // Create mapping object with local ID and database ID
+      createdCartItems.push({
+        localId: item.cartId, // The static ID from local storage
+        databaseId: createdItem._id, // The actual database ID
+        productId: createdItem.productId,
+        weight: createdItem.weight,
+        weightVariant: createdItem.weightVariant,
+        totalProduct: createdItem.totalProduct,
+        isOrdered: createdItem.isOrdered,
+        userId: user._id
+      });
+    }
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Product Added into cart successfully',
+    cartItems: createdCartItems // Return the mapping for frontend update
+  });
+});
+
 module.exports = {
   getUserCartItems,
   addToCart,
   updateCart,
   remove,
+  userLocalStorageCart
 };

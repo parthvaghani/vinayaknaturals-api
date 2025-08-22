@@ -10,6 +10,7 @@ router.get('/', auth(), cartController.getUserCartItems);
 router.post('/', auth(),validate(validation.addToCart), cartController.addToCart);
 router.patch('/', auth(),validate(validation.updateCart), cartController.updateCart);
 router.delete('/:id', auth(), validate(validation.deleteCart), cartController.remove);
+router.patch('/user-cart', auth(), validate(validation.userLocalStorageCart), cartController.userLocalStorageCart);
 
 module.exports = router;
 
