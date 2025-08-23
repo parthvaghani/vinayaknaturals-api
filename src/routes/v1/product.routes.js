@@ -10,6 +10,7 @@ router.get('/product', controller.getAll);
 router.get('/product/:id', validate(validation.getProductById), controller.getById);
 router.put('/product/:id', auth(), validate(validation.updateProduct), controller.update);
 router.delete('/product/:id', auth(), validate(validation.deleteProduct), controller.remove);
+router.post('/product/:id/review', auth(), validate(validation.addProductReview), controller.addReview);
 
 
 module.exports = router;

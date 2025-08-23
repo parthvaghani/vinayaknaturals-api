@@ -102,10 +102,32 @@ const getProducts = {
   }),
 };
 
+const addProductReview = {
+  params: Joi.object().keys({
+    id: Joi.string().custom(objectId).required().messages({
+      'any.required': 'Product ID is required',
+    }),
+  }),
+  body: Joi.object().keys({
+    reviewStar: Joi.number().min(1).max(5).required().messages({
+      'number.base': 'Review star must be a number',
+      'number.min': 'Review star must be at least 1',
+      'number.max': 'Review star must be at most 5',
+      'any.required': 'Review star is required',
+    }),
+    msg: Joi.string().max(500).optional().messages({
+      'string.empty': 'Review message is required',
+      'string.max': 'Review message must not exceed 500 characters',
+      'any.required': 'Review message is required',
+    }),
+  }),
+};
+
 module.exports = {
   createProduct,
   updateProduct,
   getProductById,
   deleteProduct,
   getProducts,
+  addProductReview,
 };

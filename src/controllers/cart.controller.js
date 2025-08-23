@@ -1,6 +1,5 @@
 const catchAsync = require('../utils/catchAsync');
 const service = require('../services/cart.service');
-const { getProductById } = require('../services/product.service');
 
 // Get all cart items for user
 const getUserCartItems = catchAsync(async (req, res) => {

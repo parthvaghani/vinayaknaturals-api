@@ -28,6 +28,11 @@ const productSchema = new mongoose.Schema({
       discount: { type: Number, default: 0 },
     }]
   },
+  review: [{
+    userId: { type: mongoose.Schema.Types.ObjectId },
+    reviewStar: { type: Number },
+    msg: { type: String }
+  }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

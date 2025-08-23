@@ -1,6 +1,6 @@
 const Product = require('../models/product.model');
-
 const ProductCategory = require('../models/productCategory.model');
+const Order = require('../models/order.model');
 
 const createProduct = async (data) => {
   try {
@@ -137,10 +137,56 @@ const deleteProduct = async (id) => {
   }
 };
 
+const addProductReview = async (productId, userId, reviewData) => {
+  try {
+    if (!productId) throw new Error('Product ID is required');
+    if (!userId) throw new Error('User ID is required');
+
+    // Check if product exists
+    const product = await Product.findById(productId);
+    if (!product) throw new Error('Product not found');
+
+    // Check if user has any delivered orders containing this product
+    const deliveredOrder = await Order.findOne({
+      userId: userId,
+      status: 'delivered',
+      'productsDetails.productId': productId
+    });
+
+    if (!deliveredOrder) {
+      throw new Error('You can only review products that you have purchased and received');
+    }
+
+    // Check if user has already reviewed this product
+    const existingReview = product.review.find(review =>
+      review.userId.toString() === userId.toString()
+    );
+
+    if (existingReview) {
+      throw new Error('You have already reviewed this product');
+    }
+
+    // Add the review
+    const newReview = {
+      userId: userId,
+      reviewStar: reviewData.reviewStar,
+      msg: reviewData.msg
+    };
+
+    product.review.push(newReview);
+    await product.save();
+
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
   getProductById,
   updateProduct,
   deleteProduct,
+  addProductReview,
 };
