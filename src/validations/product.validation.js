@@ -29,10 +29,6 @@ const createProduct = {
       'string.empty': 'Product description is required',
       'any.required': 'Product description is required',
     }),
-    images: Joi.array().items(Joi.string().uri()).min(1).required().messages({
-      'array.base': 'Images must be an array',
-      'any.required': 'Product images are required',
-    }),
     ingredients: Joi.array().items(Joi.string()).min(1).required().messages({
       'array.base': 'Ingredients must be an array of strings',
       'any.required': 'Product ingredients are required',
@@ -66,7 +62,6 @@ const updateProduct = {
     category: Joi.string().custom(objectId).optional(),
     name: Joi.string().optional(),
     description: Joi.string().optional(),
-    images: Joi.array().items(Joi.string().uri()).optional(),
     ingredients: Joi.array().items(Joi.string()).optional(),
     benefits: Joi.array().items(Joi.string()).optional(),
     isPremium: Joi.boolean().optional(),

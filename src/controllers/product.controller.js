@@ -2,19 +2,7 @@ const service = require('../services/product.service');
 
 const create = async (req, res) => {
   try {
-    if (req.user.role !== 'admin') return res.status(400).json({ message: 'You do not have permission to access this resource.' });
-    if (!req.body.category) return res.status(400).json({ message: 'Product category is required' });
-    if (!req.body.name) return res.status(400).json({ message: 'Product name is required' });
-    if (!req.body.description) return res.status(400).json({ message: 'Product description is required' });
-    if (!req.body.images) return res.status(400).json({ message: 'Product images are required' });
-    if (!req.body.ingredients) return res.status(400).json({ message: 'Product ingredients are required' });
-    if (!req.body.benefits) return res.status(400).json({ message: 'Product benefits are required' });
-    if (!req.body.isPremium) return res.status(400).json({ message: 'Product isPremium is required' });
-    if (!req.body.isPopular) return res.status(400).json({ message: 'Product isPopular is required' });
-    // if (!req.body.variants.unit) return res.status(400).json({ message: 'Product variant unit is required' });
-    // if (!req.body.variants.weight) return res.status(400).json({ message: 'Product variant weight is required' });
-    // if (!req.body.variants.price) return res.status(400).json({ message: 'Product variant price is required' });
-    const product = await service.createProduct(req.body);
+    const product = await service.createProduct(req.body, req.files);
     res.status(201).json({ message: 'Product created successfully', data: product });
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' });

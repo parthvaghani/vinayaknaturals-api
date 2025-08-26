@@ -3,9 +3,10 @@ const validation = require('../../validations/product.validation');
 const router = require('express').Router();
 const auth = require('../../middlewares/auth');
 const controller = require('../../controllers/product.controller');
+const { upload } = require('../../Helpers/multer');
 
 
-router.post('/product', auth(), validate(validation.createProduct), controller.create);
+router.post('/product', auth(), upload.array('images', 10), validate(validation.createProduct), controller.create);
 router.get('/product', controller.getAll);
 router.get('/product/:id', validate(validation.getProductById), controller.getById);
 router.put('/product/:id', auth(), validate(validation.updateProduct), controller.update);

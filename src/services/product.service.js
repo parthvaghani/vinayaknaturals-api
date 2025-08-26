@@ -2,9 +2,27 @@ const Product = require('../models/product.model');
 const Cart = require('../models/product.model');
 const ProductCategory = require('../models/productCategory.model');
 const Order = require('../models/order.model');
+const path = require('path');
+const { uploadFileToS3 } = require('../Helpers/aws-s3');
 
-const createProduct = async (data) => {
+const createProduct = async (data, files) => {
   try {
+    // Upload images to S3 if files are provided (multer memoryStorage)
+    if (files && files.length > 0) {
+      const uploads = await Promise.all(
+        files.map(async (file, index) => {
+          const safeName = path.basename(file.originalname).replace(/\s+/g, '-');
+          const key = `products/${Date.now()}-${index}-${safeName}`;
+          const result = await uploadFileToS3(file.buffer, key, file.mimetype);
+
+          if (!result.status) {
+            throw new Error('Failed to upload image');
+          }
+          return result.fileUrl;
+        })
+      );
+      data.images = uploads;
+    }
     return await Product.create(data);
   } catch (error) {
     throw error;
