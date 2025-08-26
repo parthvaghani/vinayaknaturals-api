@@ -6,15 +6,16 @@ const controller = require('../../controllers/product.controller');
 const { upload } = require('../../Helpers/multer');
 
 
-router.post('/product', auth(), upload.array('images', 10), validate(validation.createProduct), controller.create);
+router.post('/product', auth(), upload.array('images', 5), validate(validation.createProduct), controller.create);
 router.get('/product', controller.getAll);
 router.get('/product/:id', validate(validation.getProductById), controller.getById);
-router.put('/product/:id', auth(), validate(validation.updateProduct), controller.update);
+router.put('/product/:id', auth(), upload.array('images', 5), validate(validation.updateProduct), controller.update);
 router.delete('/product/:id', auth(), validate(validation.deleteProduct), controller.remove);
 router.post('/product/:id/review', auth(), validate(validation.addProductReview), controller.addReview);
 
 
 module.exports = router;
+ 
 
 /**
  * @swagger

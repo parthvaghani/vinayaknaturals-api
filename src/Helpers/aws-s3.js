@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const config = require('../config/config');
 const path = require('path');
 
@@ -35,12 +35,12 @@ const uploadS3 = async (data, fileName) => {
 };
 
 /**
- * Upload any type of file to S3
- * @param {Buffer|string} data - File data as Buffer or base64 string
- * @param {string} fileName - File name with path in S3
- * @param {string} contentType - Content type of the file (e.g., application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
- * @returns {Promise<Object>} Upload result
- */
+* Upload any type of file to S3
+* @param {Buffer|string} data - File data as Buffer or base64 string
+* @param {string} fileName - File name with path in S3
+* @param {string} contentType - Content type of the file (e.g., application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
+* @returns {Promise<Object>} Upload result
+*/
 const uploadFileToS3 = async (data, fileName, contentType) => {
   let fileBuffer;
   let fileContentType = contentType;
@@ -119,4 +119,29 @@ module.exports = {
   getFileExtensionFromBase64,
   uploadS3,
   uploadFileToS3,
+  deleteFileFromS3: async (fileUrlOrKey) => {
+    try {
+      const baseUrl = config.aws.baseUrl;
+      let key = fileUrlOrKey;
+      if (typeof fileUrlOrKey === 'string' && baseUrl && fileUrlOrKey.startsWith(`${baseUrl}/`)) {
+        key = fileUrlOrKey.substring(baseUrl.length + 1);
+      }
+
+      if (!key) {
+        return { status: false, message: 'Invalid key or URL' };
+      }
+
+      const params = {
+        Bucket: config.aws.bucketName,
+        Key: key,
+      };
+
+      const command = new DeleteObjectCommand(params);
+      const response = await s3.send(command);
+      return { status: true, data: response };
+    } catch (err) {
+      return { status: false, message: err };
+    }
+  },
 };
+ 

@@ -1,3 +1,4 @@
+
 const service = require('../services/product.service');
 
 const create = async (req, res) => {
@@ -33,7 +34,7 @@ const update = async (req, res) => {
   try {
     if (req.user.role !== 'admin') return res.status(400).json({ message: 'You do not have permission to access this resource.' });
     if (!req.params.id) return res.status(400).json({ message: 'Product ID is required' });
-    const updated = await service.updateProduct(req.params.id, req.body);
+    const updated = await service.updateProduct(req.params.id, req.body, req.files);
     res.status(200).json({ message: 'Product updated successfully', data: updated });
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' });
@@ -43,9 +44,8 @@ const update = async (req, res) => {
 const remove = async (req, res) => {
   try {
     if (req.user.role !== 'admin') return res.status(400).json({ message: 'You do not have permission to access this resource.' });
-    if (!req.params.id) return res.status(400).json({ message: 'Product ID is required' });
-    await service.deleteProduct(req.params.id);
     await service.deleteProductFromCart(req.params.id);
+    await service.deleteProduct(req.params.id);
     res.status(200).json({ message: 'Product deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message || 'Internal server error' });
