@@ -46,22 +46,19 @@ const defaultRoutes = [
   {
     path: '/cart',
     route: cartRoute,
-  }
-  ,
+  },
   {
     path: '/addresses',
     route: addressRoute,
-  }
-  ,
+  },
   {
     path: '/orders',
     route: orderRoute,
-  }
-  ,
+  },
   {
     path: '/reviews',
     route: reviewRoute,
-  }
+  },
 ];
 
 const devRoutes = [
@@ -77,7 +74,8 @@ defaultRoutes.forEach((route) => {
 });
 
 /* istanbul ignore next */
-if (config.env === 'development') { //NOTE - docs is visible in development/production mode
+if (config.env === 'development') {
+  //NOTE - docs is visible in development/production mode
   devRoutes.forEach((route) => {
     router.use(route.path, route.route);
   });

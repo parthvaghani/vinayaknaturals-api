@@ -19,7 +19,7 @@ const importData = async () => {
           name: cat.name,
           description: cat.description,
           heroImage: cat.heroImage,
-          pricingEnabled: cat.pricingEnabled
+          pricingEnabled: cat.pricingEnabled,
         });
       }
 
@@ -27,7 +27,7 @@ const importData = async () => {
         // Check if product already exists under same category
         const existingProduct = await Product.findOne({
           name: sub.name,
-          category: categoryDoc._id
+          category: categoryDoc._id,
         });
 
         if (!existingProduct) {
@@ -44,14 +44,14 @@ const importData = async () => {
               gm: sub.variants?.gm ? Object.entries(sub.variants.gm).map(([weight, val]) => ({
                 weight,
                 price: val.price,
-                discount: val.discount || 0
+                discount: val.discount || 0,
               })) : [],
               kg: sub.variants?.kg ? Object.entries(sub.variants.kg).map(([weight, val]) => ({
                 weight,
                 price: val.price,
-                discount: val.discount || 0
-              })) : []
-            }
+                discount: val.discount || 0,
+              })) : [],
+            },
           });
         }
       }

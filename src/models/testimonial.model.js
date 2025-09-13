@@ -8,8 +8,7 @@ const testimonialSchema = new mongoose.Schema(
     location: { type: String, trim: true },
     visible: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model('Testimonial', testimonialSchema);
-

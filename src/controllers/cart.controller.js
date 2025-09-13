@@ -8,13 +8,13 @@ const getUserCartItems = catchAsync(async (req, res) => {
   if (!data) {
     return res.status(400).json({
       success: false,
-      message: 'Something Went Wrong In Get User Cart'
+      message: 'Something Went Wrong In Get User Cart',
     });
   }
   return res.status(200).json({
     success: true,
     message: 'Get Cart Data successfully',
-    data: data
+    data: data,
   });
 });
 
@@ -51,14 +51,14 @@ const addToCart = catchAsync(async (req, res) => {
     userId: user?._id,
     productId: req.body.productId,
     totalProduct: req.body.totalProduct || 1,
-    weight:  req.body.weight,
-    weightVariant: req.body.weightVariant
+    weight: req.body.weight,
+    weightVariant: req.body.weightVariant,
   };
 
   const existingCart = await service.getCartByDetails({
     userId: dataPayload.userId,
     productId: dataPayload.productId,
-    weight: dataPayload.weight
+    weight: dataPayload.weight,
   });
 
   if (existingCart) {
@@ -68,7 +68,7 @@ const addToCart = catchAsync(async (req, res) => {
       return res.status(400).json({
         success: false,
         message: 'Something Went Wrong In Add Product To Cart',
-        productId: existingCart._id.toString()
+        productId: existingCart._id.toString(),
       });
     }
     return res.status(200).json({
@@ -80,13 +80,13 @@ const addToCart = catchAsync(async (req, res) => {
     if (!data) {
       return res.status(400).json({
         success: false,
-        message: 'Something Went Wrong In Add Product To Cart'
+        message: 'Something Went Wrong In Add Product To Cart',
       });
     }
     return res.status(200).json({
       success: true,
       message: 'Product has been added to your cart',
-      productId: data._id.toString()
+      productId: data._id.toString(),
     });
   }
 });
@@ -100,7 +100,7 @@ const updateCart = catchAsync(async (req, res) => {
   if (!cartItem) {
     return res.status(400).json({
       success: false,
-      message: 'Cart item not found'
+      message: 'Cart item not found',
     });
   }
 
@@ -112,7 +112,7 @@ const updateCart = catchAsync(async (req, res) => {
       if (!weightVariant) {
         return res.status(400).json({
           success: false,
-          message: 'Variant not found.'
+          message: 'Variant not found.',
         });
       }
 
@@ -147,24 +147,23 @@ const updateCart = catchAsync(async (req, res) => {
     default:
       return res.status(400).json({
         success: false,
-        message: 'Invalid action for updating cart'
+        message: 'Invalid action for updating cart',
       });
   }
 
   if (!updatedData) {
     return res.status(400).json({
       success: false,
-      message: 'Something went wrong while updating cart'
+      message: 'Something went wrong while updating cart',
     });
   }
 
   return res.status(200).json({
     success: true,
     message,
-    data: updatedData // optional: return updated item
+    data: updatedData, // optional: return updated item
   });
 });
-
 
 // Remove cart item
 const remove = catchAsync(async (req, res) => {
@@ -188,13 +187,13 @@ const remove = catchAsync(async (req, res) => {
   if (deleteResult.modifiedCount === 0) {
     return res.status(400).json({
       success: false,
-      message: 'Something Went Wrong In Remove Product From Cart'
+      message: 'Something Went Wrong In Remove Product From Cart',
     });
   }
 
   return res.status(200).json({
     success: true,
-    message: 'Product removed from cart successfully'
+    message: 'Product removed from cart successfully',
   });
 });
 
@@ -222,7 +221,7 @@ const userLocalStorageCart = catchAsync(async (req, res) => {
         productId: item.productId,
         weight: item.weight,
         weightVariant: item.weightVariant,
-        totalProduct: item.totalProduct
+        totalProduct: item.totalProduct,
       });
 
       // Create mapping object with local ID and database ID
@@ -234,7 +233,7 @@ const userLocalStorageCart = catchAsync(async (req, res) => {
         weightVariant: createdItem.weightVariant,
         totalProduct: createdItem.totalProduct,
         isOrdered: createdItem.isOrdered,
-        userId: user._id
+        userId: user._id,
       });
     }
   }
@@ -242,7 +241,7 @@ const userLocalStorageCart = catchAsync(async (req, res) => {
   return res.status(200).json({
     success: true,
     message: 'Product Added into cart successfully',
-    cartItems: createdCartItems // Return the mapping for frontend update
+    cartItems: createdCartItems, // Return the mapping for frontend update
   });
 });
 
@@ -251,5 +250,5 @@ module.exports = {
   addToCart,
   updateCart,
   remove,
-  userLocalStorageCart
+  userLocalStorageCart,
 };

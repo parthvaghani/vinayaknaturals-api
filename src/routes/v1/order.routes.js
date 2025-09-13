@@ -15,4 +15,3 @@ router.get('/all', auth(), validate(validation.getAllOrders), controller.getAllO
 router.get('/:id', auth(), validate(validation.getOrderById), controller.getOrderById);
 
 module.exports = router;
-

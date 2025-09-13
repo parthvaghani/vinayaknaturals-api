@@ -22,7 +22,8 @@ const generateToken = (user, expires, type, secret = config.jwt.secret) => {
     email: user.email || '',
     role: user.role,
     businessType: user.user_details?.businessType || null,
-    user_details: {                     // ✅ Properly added user details
+    user_details: {
+      // ✅ Properly added user details
       name: user.user_details?.name || '',
       country: user.user_details?.country || '',
       gender: user.user_details?.gender || '',

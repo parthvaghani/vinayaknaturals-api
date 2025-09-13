@@ -249,7 +249,6 @@ module.exports = router;
  *                   example: "Email already taken or Invalid phone number format"
  */
 
-
 /**
  * @swagger
  * /auth/login:

@@ -14,7 +14,7 @@ const create = async (req, res) => {
 
     const doc = await service.createLead(
       { page, button, message, phoneNumber, metadata, whatsappIntent: !!whatsappIntent, whatsappSent: !!whatsappSent },
-      reqInfo
+      reqInfo,
     );
 
     return res.status(201).json({ message: 'Lead captured successfully', data: doc });
@@ -45,4 +45,3 @@ const getById = async (req, res) => {
 };
 
 module.exports = { create, getAll, getById };
-

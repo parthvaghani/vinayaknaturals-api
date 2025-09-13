@@ -12,4 +12,3 @@ router.put('/suggested/:id', auth(), validate(validation.updateSuggestedProduct)
 router.delete('/suggested/:id', auth(), validate(validation.deleteSuggestedProduct), controller.remove);
 
 module.exports = router;
-

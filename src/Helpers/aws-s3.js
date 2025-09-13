@@ -35,12 +35,12 @@ const uploadS3 = async (data, fileName) => {
 };
 
 /**
-* Upload any type of file to S3
-* @param {Buffer|string} data - File data as Buffer or base64 string
-* @param {string} fileName - File name with path in S3
-* @param {string} contentType - Content type of the file (e.g., application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
-* @returns {Promise<Object>} Upload result
-*/
+ * Upload any type of file to S3
+ * @param {Buffer|string} data - File data as Buffer or base64 string
+ * @param {string} fileName - File name with path in S3
+ * @param {string} contentType - Content type of the file (e.g., application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
+ * @returns {Promise<Object>} Upload result
+ */
 const uploadFileToS3 = async (data, fileName, contentType) => {
   let fileBuffer;
   let fileContentType = contentType;
@@ -144,4 +144,3 @@ module.exports = {
     }
   },
 };
- 

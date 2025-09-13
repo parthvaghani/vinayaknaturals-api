@@ -35,7 +35,6 @@ const getUsers = catchAsync(async (req, res) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Users');
 
-
     const result = await excelService.getUsers(options);
     if (result.length > 0) {
       const headers = Object.keys(result[0]);
@@ -43,17 +42,17 @@ const getUsers = catchAsync(async (req, res) => {
       worksheet.addRow(headers);
       worksheet.getRow(1).font = {
         bold: true,
-        size: 14
+        size: 14,
       };
 
-      result.forEach(item => {
-        const rowData = headers.map(header => item[header]);
+      result.forEach((item) => {
+        const rowData = headers.map((header) => item[header]);
         worksheet.addRow(rowData);
       });
 
-      worksheet.columns.forEach(column => {
+      worksheet.columns.forEach((column) => {
         let maxLength = 0;
-        column.eachCell({ includeEmpty: true }, cell => {
+        column.eachCell({ includeEmpty: true }, (cell) => {
           const columnLength = cell.value ? cell.value.toString().length : 10;
           if (columnLength > maxLength) {
             maxLength = columnLength;
@@ -70,7 +69,7 @@ const getUsers = catchAsync(async (req, res) => {
       data: base64Data,
       fileName: fileName,
       contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      size: buffer.length
+      size: buffer.length,
     });
   } else {
     const result = await userService.queryUsers(filter, options, searchTerm, searchQuery);
@@ -122,7 +121,7 @@ const updateUser = catchAsync(async (req, res) => {
 
   res.status(200).json({
     message: 'User updated successfully',
-    data:true
+    data: true,
   });
 });
 
@@ -155,7 +154,7 @@ const getMe = catchAsync(async (req, res) => {
     const { userData } = await userService.getAllAdminData();
     return res.send({
       ...userDoc,
-      userData
+      userData,
     });
   }
 

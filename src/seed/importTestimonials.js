@@ -36,4 +36,3 @@ const importTestimonials = async () => {
 };
 
 importTestimonials();
-

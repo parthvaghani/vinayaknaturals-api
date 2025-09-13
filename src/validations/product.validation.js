@@ -46,9 +46,11 @@ const createProduct = {
     variants: Joi.object({
       gm: Joi.array().items(variantSchema),
       kg: Joi.array().items(variantSchema),
-    }).required().messages({
-      'any.required': 'Variants object is required',
-    }),
+    })
+      .required()
+      .messages({
+        'any.required': 'Variants object is required',
+      }),
   }),
 };
 

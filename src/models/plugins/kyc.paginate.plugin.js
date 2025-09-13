@@ -45,16 +45,13 @@ const kycPaginate = (schema) => {
     // If searchQuery is provided, first find matching users
     if (searchQuery && searchQuery.trim() !== '') {
       const userQuery = {
-        $or: [
-          { businessName: { $regex: searchQuery, $options: 'i' } },
-          { email: { $regex: searchQuery, $options: 'i' } }
-        ]
+        $or: [{ businessName: { $regex: searchQuery, $options: 'i' } }, { email: { $regex: searchQuery, $options: 'i' } }],
       };
-      
+
       // Find users matching the search criteria
       const matchingUsers = await Model.find(userQuery).select('_id');
-      const userIds = matchingUsers.map(user => user._id);
-      
+      const userIds = matchingUsers.map((user) => user._id);
+
       // Add matching userIds to the filter along with document field searches
       if (userIds.length > 0) {
         filter = {
@@ -63,8 +60,8 @@ const kycPaginate = (schema) => {
             { userId: { $in: userIds } },
             { documentNumber: { $regex: searchQuery, $options: 'i' } },
             { documentType: { $regex: searchQuery, $options: 'i' } },
-            { remarks: { $regex: searchQuery, $options: 'i' } }
-          ]
+            { remarks: { $regex: searchQuery, $options: 'i' } },
+          ],
         };
       } else {
         // If no matching users, search only document fields
@@ -73,15 +70,15 @@ const kycPaginate = (schema) => {
           $or: [
             { documentNumber: { $regex: searchQuery, $options: 'i' } },
             { documentType: { $regex: searchQuery, $options: 'i' } },
-            { remarks: { $regex: searchQuery, $options: 'i' } }
-          ]
+            { remarks: { $regex: searchQuery, $options: 'i' } },
+          ],
         };
       }
     }
 
     // Get total count for pagination
     const countPromise = this.countDocuments(filter).exec();
-    
+
     // Find documents with pagination
     let docsPromise = this.find(filter).sort(sort).skip(skip).limit(limit);
 
@@ -91,7 +88,7 @@ const kycPaginate = (schema) => {
       populateOption
         .split('.')
         .reverse()
-        .reduce((a, b) => ({ path: b, populate: a }))
+        .reduce((a, b) => ({ path: b, populate: a })),
     );
 
     docsPromise = docsPromise.exec();

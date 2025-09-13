@@ -1,4 +1,3 @@
-
 const service = require('../services/product.service');
 
 const create = async (req, res) => {

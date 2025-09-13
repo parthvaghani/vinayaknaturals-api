@@ -36,20 +36,8 @@ const adminUserTypePermissions = {
     'VIEW_BANKS',
     'EXPORT_DATA',
   ],
-  support_admin: [
-    'VIEW_USERS',
-    'VIEW_KYC',
-    'VIEW_SUPPORT_TICKETS',
-    'RESPOND_SUPPORT_TICKETS',
-  ],
-  view_only_admin: [
-    'VIEW_USERS',
-    'VIEW_KYC',
-    'VIEW_TRANSACTIONS',
-    'VIEW_PAYOUTS',
-    'VIEW_BANKS',
-    'VIEW_SUPPORT_TICKETS',
-  ],
+  support_admin: ['VIEW_USERS', 'VIEW_KYC', 'VIEW_SUPPORT_TICKETS', 'RESPOND_SUPPORT_TICKETS'],
+  view_only_admin: ['VIEW_USERS', 'VIEW_KYC', 'VIEW_TRANSACTIONS', 'VIEW_PAYOUTS', 'VIEW_BANKS', 'VIEW_SUPPORT_TICKETS'],
 };
 
 const allAdminUserTypes = ['super_admin', 'finance_admin', 'support_admin', 'view_only_admin'];

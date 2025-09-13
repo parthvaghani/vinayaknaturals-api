@@ -20,7 +20,7 @@ const createProduct = async (data, files) => {
             throw new Error('Failed to upload image');
           }
           return { url: key };
-        })
+        }),
       );
       data.images = uploads;
     }
@@ -32,15 +32,7 @@ const createProduct = async (data, files) => {
 
 const getAllProducts = async (query = {}) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      sortBy,
-      search = '',
-      category,
-      isPremium,
-      isPopular,
-    } = query;
+    const { page = 1, limit = 10, sortBy, search = '', category, isPremium, isPopular } = query;
 
     const filter = {};
     if (category) filter.category = category;
@@ -103,11 +95,7 @@ const getAllProducts = async (query = {}) => {
 
     const [totalResults, results] = await Promise.all([
       Product.countDocuments(combined),
-      Product.find(combined)
-        .populate('category')
-        .sort(sort)
-        .skip(skip)
-        .limit(options.limit),
+      Product.find(combined).populate('category').sort(sort).skip(skip).limit(options.limit),
     ]);
 
     const totalPages = Math.ceil(totalResults / options.limit);
@@ -153,7 +141,7 @@ const updateProduct = async (id, data, files) => {
             throw new Error('Failed to upload image');
           }
           return { url: key };
-        })
+        }),
       );
     }
 
@@ -168,11 +156,7 @@ const updateProduct = async (id, data, files) => {
     }
     // First update: $pull
     if (imagesToRemove.length > 0) {
-      await Product.findByIdAndUpdate(
-        id,
-        { $pull: { images: { url: { $in: imagesToRemove } } } },
-        { new: false }
-      );
+      await Product.findByIdAndUpdate(id, { $pull: { images: { url: { $in: imagesToRemove } } } }, { new: false });
     }
 
     // Build $set and $push for second update
@@ -199,8 +183,12 @@ const updateProduct = async (id, data, files) => {
     if (imagesToRemove.length > 0) {
       await Promise.all(
         imagesToRemove.map(async (imgKey) => {
-          try { await deleteFileFromS3(imgKey); } catch { /* noop */ }
-        })
+          try {
+            await deleteFileFromS3(imgKey);
+          } catch {
+            /* noop */
+          }
+        }),
       );
     }
 
@@ -218,8 +206,12 @@ const deleteProduct = async (id) => {
     if (product.images && product.images.length) {
       await Promise.all(
         product.images.map(async (img) => {
-          try { await deleteFileFromS3(img.url); } catch { /* noop */ }
-        })
+          try {
+            await deleteFileFromS3(img.url);
+          } catch {
+            /* noop */
+          }
+        }),
       );
     }
     return await Product.findByIdAndDelete(id);
@@ -241,7 +233,7 @@ const addProductReview = async (productId, userId, reviewData) => {
     const deliveredOrder = await Order.findOne({
       userId: userId,
       status: 'delivered',
-      'productsDetails.productId': productId
+      'productsDetails.productId': productId,
     });
 
     if (!deliveredOrder) {
@@ -249,9 +241,7 @@ const addProductReview = async (productId, userId, reviewData) => {
     }
 
     // Check if user has already reviewed this product
-    const existingReview = product.review.find(review =>
-      review.userId.toString() === userId.toString()
-    );
+    const existingReview = product.review.find((review) => review.userId.toString() === userId.toString());
 
     if (existingReview) {
       throw new Error('You have already reviewed this product');
@@ -261,7 +251,7 @@ const addProductReview = async (productId, userId, reviewData) => {
     const newReview = {
       userId: userId,
       reviewStar: reviewData.reviewStar,
-      msg: reviewData.msg
+      msg: reviewData.msg,
     };
 
     product.review.push(newReview);
@@ -294,5 +284,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addProductReview,
-  deleteProductFromCart
+  deleteProductFromCart,
 };

@@ -11,7 +11,6 @@ const register = catchAsync(async (req, res) => {
   try {
     const user = await userService.createNewUser(req.body);
 
-
     try {
       const slackPayload = {
         channel: config.slack_channel,
@@ -32,7 +31,7 @@ const register = catchAsync(async (req, res) => {
     let userObj = user;
     if (user.role === 'admin') {
       userObj = {
-        ...user._doc ? user._doc : user,
+        ...(user._doc ? user._doc : user),
         userType: user.userType || null,
         permissions: user.permissions || [],
       };
@@ -80,11 +79,10 @@ const login = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Login failed. Please try again.');
   }
 
-
   const tokens = await tokenService.generateAuthTokens(result.user);
   return res.status(httpStatus.OK).send({
     success: true,
-    user:result.user,
+    user: result.user,
     tokens,
     message: 'Login successful',
   });
@@ -131,5 +129,5 @@ module.exports = {
   verifyEmail,
   registerUser,
   changePassword,
-  checkUserController
+  checkUserController,
 };

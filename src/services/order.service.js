@@ -132,14 +132,9 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
     const weight = item.weight; // e.g. '200' or '1'
     let pricePerUnit = 0;
     let discount = 0;
-    if (
-      product &&
-      product.variants &&
-      product.variants[weightVariant] &&
-      Array.isArray(product.variants[weightVariant])
-    ) {
+    if (product && product.variants && product.variants[weightVariant] && Array.isArray(product.variants[weightVariant])) {
       const foundVariant = product.variants[weightVariant].find(
-        (v) => v && v.weight && v.weight.toString() === weight.toString()
+        (v) => v && v.weight && v.weight.toString() === weight.toString(),
       );
       if (foundVariant) {
         pricePerUnit = typeof foundVariant.price === 'number' ? foundVariant.price : 0;
@@ -172,9 +167,7 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
     },
     productsDetails,
     phoneNumber,
-    statusHistory: [
-      { status: 'placed', updatedBy: 'user', note: 'Order placed' }
-    ],
+    statusHistory: [{ status: 'placed', updatedBy: 'user', note: 'Order placed' }],
   });
 
   await Cart.updateMany({ userId, isOrdered: false }, { $set: { isOrdered: true } });
@@ -206,8 +199,7 @@ const getOrdersByUser = async (userId, userRole) => {
     return Order.find()
       .populate({ path: 'userId', select: 'email phoneNumber role user_details' })
       .populate({ path: 'productsDetails.productId', select: 'name price images' });
-  }
-  else {
+  } else {
     return Order.find({ userId })
       .sort({ createdAt: -1 })
       .populate({ path: 'userId', select: 'email phoneNumber role user_details' })
@@ -242,7 +234,7 @@ const cancelOrder = async (id, userId, reason, role) => {
         },
       },
     },
-    { new: true }
+    { new: true },
   ).populate([
     { path: 'userId', select: 'email phoneNumber role user_details' },
     { path: 'productsDetails.productId', select: 'name price images' },
@@ -255,23 +247,11 @@ const cancelOrder = async (id, userId, reason, role) => {
 
     // Send email to buyer
     if (buyerEmail) {
-      emailService.sendOrderStatusUpdateEmailForBuyer(
-        buyerEmail,
-        updatedOrder,
-        'cancelled',
-        buyerName,
-        reason
-      );
+      emailService.sendOrderStatusUpdateEmailForBuyer(buyerEmail, updatedOrder, 'cancelled', buyerName, reason);
     }
 
     // Send email to seller
-    emailService.sendOrderStatusUpdateEmailForSeller(
-      updatedOrder,
-      'cancelled',
-      buyerEmail,
-      buyerName,
-      reason
-    );
+    emailService.sendOrderStatusUpdateEmailForSeller(updatedOrder, 'cancelled', buyerEmail, buyerName, reason);
   }
 
   return updatedOrder;
@@ -339,9 +319,19 @@ const updateOrderStatus = async (id, newStatus, newPaymentStatus, note, role, re
     order.paymentStatus = newPaymentStatus;
   }
   if (typeof newStatus === 'string' && newStatus !== '') {
-    order.statusHistory.push({ status: newStatus, updatedBy: role === 'admin' ? 'admin' : 'user', note: note || null, date: new Date() });
+    order.statusHistory.push({
+      status: newStatus,
+      updatedBy: role === 'admin' ? 'admin' : 'user',
+      note: note || null,
+      date: new Date(),
+    });
   } else if (note && note !== '') {
-    order.statusHistory.push({ status: order.status, updatedBy: role === 'admin' ? 'admin' : 'user', note: note || null, date: new Date() });
+    order.statusHistory.push({
+      status: order.status,
+      updatedBy: role === 'admin' ? 'admin' : 'user',
+      note: note || null,
+      date: new Date(),
+    });
   }
   await order.save();
   await order.populate([
@@ -356,23 +346,11 @@ const updateOrderStatus = async (id, newStatus, newPaymentStatus, note, role, re
 
     // Send email to buyer
     if (buyerEmail) {
-      emailService.sendOrderStatusUpdateEmailForBuyer(
-        buyerEmail,
-        order,
-        newStatus,
-        buyerName,
-        note
-      );
+      emailService.sendOrderStatusUpdateEmailForBuyer(buyerEmail, order, newStatus, buyerName, note);
     }
 
     // Send email to seller
-    emailService.sendOrderStatusUpdateEmailForSeller(
-      order,
-      newStatus,
-      buyerEmail,
-      buyerName,
-      note
-    );
+    emailService.sendOrderStatusUpdateEmailForSeller(order, newStatus, buyerEmail, buyerName, note);
   }
 
   return order;
@@ -420,11 +398,7 @@ const updateOrder = async (id, updateData, userId, role) => {
     },
   };
 
-  const updatedOrder = await Order.findOneAndUpdate(
-    filter,
-    updateObject,
-    { new: true }
-  ).populate([
+  const updatedOrder = await Order.findOneAndUpdate(filter, updateObject, { new: true }).populate([
     { path: 'userId', select: 'email phoneNumber role user_details' },
     { path: 'productsDetails.productId', select: 'name price images' },
   ]);
@@ -441,4 +415,3 @@ module.exports = {
   updateOrderStatus,
   updateOrder,
 };
-

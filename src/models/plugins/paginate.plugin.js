@@ -52,12 +52,12 @@ const paginate = (schema) => {
           { 'user_details.name': { $regex: searchQuery, $options: 'i' } },
           { 'user_details.country': { $regex: searchQuery, $options: 'i' } },
           { role: { $regex: searchQuery, $options: 'i' } },
-          { 'remarks': { $regex: searchQuery, $options: 'i' } },
-          { 'documentType': { $regex: searchQuery, $options: 'i' } },
+          { remarks: { $regex: searchQuery, $options: 'i' } },
+          { documentType: { $regex: searchQuery, $options: 'i' } },
           { 'user.businessName': { $regex: searchQuery, $options: 'i' } },
           { 'user.email': { $regex: searchQuery, $options: 'i' } },
-          { 'documentNumber': { $regex: searchQuery, $options: 'i' } },
-          { 'utrNumber': { $regex: searchQuery, $options: 'i' } },
+          { documentNumber: { $regex: searchQuery, $options: 'i' } },
+          { utrNumber: { $regex: searchQuery, $options: 'i' } },
         ],
       };
     }

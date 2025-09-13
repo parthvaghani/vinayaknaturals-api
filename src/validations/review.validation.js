@@ -34,4 +34,3 @@ const listAll = {
 };
 
 module.exports = { create, listByProduct, listAll };
-

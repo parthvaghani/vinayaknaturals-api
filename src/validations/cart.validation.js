@@ -31,14 +31,16 @@ const deleteCart = {
 
 const userLocalStorageCart = {
   body: Joi.object().keys({
-    cart: Joi.array().items(
-      Joi.object().keys({
-        productId: Joi.string().custom(objectId).required(),
-        weight: Joi.number().required(),
-        weightVariant: Joi.string().valid('gm', 'kg').required(),
-        totalProduct: Joi.number().required(),
-      })
-    ).required(),
+    cart: Joi.array()
+      .items(
+        Joi.object().keys({
+          productId: Joi.string().custom(objectId).required(),
+          weight: Joi.number().required(),
+          weightVariant: Joi.string().valid('gm', 'kg').required(),
+          totalProduct: Joi.number().required(),
+        }),
+      )
+      .required(),
   }),
 };
 
@@ -46,5 +48,5 @@ module.exports = {
   addToCart,
   updateCart,
   deleteCart,
-  userLocalStorageCart
+  userLocalStorageCart,
 };

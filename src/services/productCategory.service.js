@@ -46,12 +46,7 @@ const getAllCategories = async (query = {}) => {
     if (search && String(search).trim() !== '') {
       const regex = { $regex: String(search), $options: 'i' };
       searchFilter = {
-        $or: [
-          { category: regex },
-          { name: regex },
-          { description: regex },
-          { heroImage: regex },
-        ],
+        $or: [{ category: regex }, { name: regex }, { description: regex }, { heroImage: regex }],
       };
     }
 
@@ -59,10 +54,7 @@ const getAllCategories = async (query = {}) => {
 
     const [totalResults, results] = await Promise.all([
       ProductCategory.countDocuments(combined),
-      ProductCategory.find(combined)
-        .sort(sort)
-        .skip(skip)
-        .limit(options.limit),
+      ProductCategory.find(combined).sort(sort).skip(skip).limit(options.limit),
     ]);
 
     const totalPages = Math.ceil(totalResults / options.limit);

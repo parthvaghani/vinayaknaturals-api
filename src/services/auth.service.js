@@ -24,7 +24,7 @@ const loginUserWithEmailAndPassword = async (emailOrUsername, password) => {
 
   try {
     let user;
-    
+
     // Check if input is an email
     const isEmail = validator.isEmail(emailOrUsername);
 
@@ -51,19 +51,17 @@ const loginUserWithEmailAndPassword = async (emailOrUsername, password) => {
     }
 
     if (user.twoFAEnabled) {
-
       return {
         user: {
           id: user.id,
           email: user.email,
           emailOrUsername: user.emailOrUsername,
           password: password,
-          twoFAEnabled: true
+          twoFAEnabled: true,
         },
-        twoFAEnabled: true
+        twoFAEnabled: true,
       };
     }
-
 
     const tokens = await tokenService.generateAuthTokens(user);
     return { user, tokens };
@@ -81,13 +79,12 @@ const loginUserWithEmailAndPassword = async (emailOrUsername, password) => {
  */
 
 const checkUser = async (userBody) => {
-  if (userBody.email && await User.isEmailTaken(userBody.email)) {
+  if (userBody.email && (await User.isEmailTaken(userBody.email))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  if (userBody.phoneNumber && await User.isPhoneNumberTaken(userBody.phoneNumber)) {
+  if (userBody.phoneNumber && (await User.isPhoneNumberTaken(userBody.phoneNumber))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'PhoneNumber already taken!');
   }
-
 
   return { phoneNumberTaken: false, emailTaken: false };
 };
@@ -114,7 +111,7 @@ const loginAdmin = async (email, password, phoneNumber, method) => {
     let userObj = user;
     if (user.role === 'admin') {
       userObj = {
-        ...user._doc ? user._doc : user,
+        ...(user._doc ? user._doc : user),
         userType: user.userType || null,
         permissions: user.permissions || [],
       };

@@ -154,4 +154,3 @@ module.exports = router;
  *       200:
  *         description: Address deleted
  */
-

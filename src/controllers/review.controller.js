@@ -42,4 +42,3 @@ const listAll = async (req, res) => {
 };
 
 module.exports = { create, listByProduct, listAll };
-

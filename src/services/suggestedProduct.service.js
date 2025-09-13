@@ -10,13 +10,7 @@ const createSuggestedProduct = async (data) => {
 
 const getAllSuggestedProducts = async (query = {}) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      sortBy,
-      search = '',
-      status,
-    } = query;
+    const { page = 1, limit = 10, sortBy, search = '', status } = query;
 
     const filter = {};
     if (status) filter.status = status;
@@ -51,11 +45,7 @@ const getAllSuggestedProducts = async (query = {}) => {
     if (search && String(search).trim() !== '') {
       const regex = { $regex: String(search), $options: 'i' };
       searchFilter = {
-        $or: [
-          { name: regex },
-          { description: regex },
-          { ingredients: regex },
-        ],
+        $or: [{ name: regex }, { description: regex }, { ingredients: regex }],
       };
     }
 
@@ -120,4 +110,3 @@ module.exports = {
   updateSuggestedProduct,
   deleteSuggestedProduct,
 };
-

@@ -30,7 +30,7 @@ const toJSON = (schema) => {
         ret.id = ret._id.toString();
         delete ret._id;
       }
-      
+
       delete ret.__v;
       if (transform) {
         return transform(doc, ret, options);

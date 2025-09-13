@@ -16,15 +16,7 @@ const createLead = async (data, reqInfo = {}) => {
 
 const getLeads = async (query = {}) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      sortBy,
-      search = '',
-      status,
-      whatsappIntent,
-      whatsappSent,
-    } = query;
+    const { page = 1, limit = 10, sortBy, search = '', status, whatsappIntent, whatsappSent } = query;
 
     const filter = {};
     if (status) filter.status = status;
@@ -106,4 +98,3 @@ const getLeadById = async (id) => {
 };
 
 module.exports = { createLead, getLeads, getLeadById };
-

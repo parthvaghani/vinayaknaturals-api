@@ -18,7 +18,7 @@ const leadSchema = new mongoose.Schema(
     whatsappIntent: { type: Boolean, default: false }, // Whether this lead intended WhatsApp send
     whatsappSent: { type: Boolean, default: false }, // If frontend confirms sent
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports = mongoose.model('WhatsAppLead', leadSchema);

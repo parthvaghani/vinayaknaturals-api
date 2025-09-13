@@ -42,7 +42,6 @@ const createAdmin = {
   }),
 };
 
-
 const getUsers = {
   query: Joi.object().keys({
     searchTerm: Joi.string(),
@@ -253,5 +252,5 @@ module.exports = {
   calculateCommission,
   generateFinflexKeys,
   createAdmin,
-  transferPgBalance
+  transferPgBalance,
 };

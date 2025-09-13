@@ -41,7 +41,7 @@ if (!config.isServerless) {
     }
   });
 
-  module.exports = { handler: serverless(app),  };
+  module.exports = { handler: serverless(app) };
 } else {
   // Serverless mode
   let isConnected = false;

@@ -9,4 +9,3 @@ router.get('/whatsApp-lead', validate(validation.getLeads), controller.getAll);
 router.get('/whatsApp-lead/:id', validate(validation.getLeadById), controller.getById);
 
 module.exports = router;
-

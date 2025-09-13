@@ -62,4 +62,3 @@ const remove = async (req, res) => {
 };
 
 module.exports = { create, getAll, getById, update, remove };
-

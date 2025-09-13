@@ -28,8 +28,7 @@ const sendMail = async (options) => {
 const formatMoney = (val) => `₹${val}`;
 const formatDate = (date) => (date ? moment(date).format('D/M/YYYY, h:mm:ss a') : '');
 const joinAddress = (a = {}) =>
-  [a.addressLine1, a.addressLine2, a.city, `${a.state}${a.zip ? ` ${a.zip}` : ''}`, a.country]
-    .filter(Boolean).join('<br/>');
+  [a.addressLine1, a.addressLine2, a.city, `${a.state}${a.zip ? ` ${a.zip}` : ''}`, a.country].filter(Boolean).join('<br/>');
 
 /* ---------- Order Summary (plain text) ---------- */
 const formatOrderSummary = (order) =>
@@ -42,16 +41,17 @@ const formatOrderSummary = (order) =>
 
 /* ---------- Table Builder ---------- */
 const buildProductRows = (order, trackTotals = { subtotal: 0, discount: 0 }) =>
-  (order?.productsDetails || []).map((item) => {
-    const qty = item.totalUnit || 0;
-    const price = +item.pricePerUnit || 0;
-    const discount = +item.discount || 0;
-    const lineTotal = (price - discount) * qty;
+  (order?.productsDetails || [])
+    .map((item) => {
+      const qty = item.totalUnit || 0;
+      const price = +item.pricePerUnit || 0;
+      const discount = +item.discount || 0;
+      const lineTotal = (price - discount) * qty;
 
-    trackTotals.subtotal += price * qty;
-    trackTotals.discount += discount * qty;
+      trackTotals.subtotal += price * qty;
+      trackTotals.discount += discount * qty;
 
-    return `
+      return `
       <tr>
         <td style="padding:10px;border:1px solid #e5e7eb;">${item?.productId?.name || item.productId}</td>
         <td style="padding:10px;border:1px solid #e5e7eb;">${item.weight ? `${item.weight}${item.weightVariant || ''}` : ''}</td>
@@ -60,7 +60,8 @@ const buildProductRows = (order, trackTotals = { subtotal: 0, discount: 0 }) =>
         <td style="padding:10px;border:1px solid #e5e7eb;">${formatMoney(discount)}</td>
         <td style="padding:10px;border:1px solid #e5e7eb;">${formatMoney(lineTotal)}</td>
       </tr>`;
-  }).join('');
+    })
+    .join('');
 
 /* ---------- Common Layout Wrapper ---------- */
 const wrapMail = (content) => `
@@ -199,21 +200,21 @@ const sendOrderPlacedEmailForSeller = async (buyerEmail, order, buyerName) => {
 
 /* ---------- Status Update Email Functions ---------- */
 const statusMessages = {
-  'placed': 'Your order has been placed and is being reviewed.',
-  'accepted': 'Your order has been accepted and is being prepared.',
-  'inprogress': 'Your order is now being processed.',
-  'completed': 'Your order has been completed and is ready for delivery.',
-  'delivered': 'Your order has been delivered successfully.',
-  'cancelled': 'Your order has been cancelled.'
+  placed: 'Your order has been placed and is being reviewed.',
+  accepted: 'Your order has been accepted and is being prepared.',
+  inprogress: 'Your order is now being processed.',
+  completed: 'Your order has been completed and is ready for delivery.',
+  delivered: 'Your order has been delivered successfully.',
+  cancelled: 'Your order has been cancelled.',
 };
 
 const statusEmojis = {
-  'placed': '📋',
-  'accepted': '✅',
-  'inprogress': '⏳',
-  'completed': '🎉',
-  'delivered': '📦',
-  'cancelled': '❌'
+  placed: '📋',
+  accepted: '✅',
+  inprogress: '⏳',
+  completed: '🎉',
+  delivered: '📦',
+  cancelled: '❌',
 };
 const buildStatusUpdateHtml = (order, newStatus, buyerName, note = '') => {
   const emoji = statusEmojis[newStatus] || '📋';

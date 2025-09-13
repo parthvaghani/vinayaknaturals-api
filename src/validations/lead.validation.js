@@ -37,4 +37,3 @@ const getLeadById = {
 };
 
 module.exports = { createLead, getLeads, getLeadById };
-

@@ -79,7 +79,7 @@ const checkUserValidation = {
     email: Joi.string().email().required(),
     phoneNumber: Joi.string().min(7).max(15).required(),
     password: Joi.string().required().custom(password),
-  })
+  }),
 };
 
 const login = {

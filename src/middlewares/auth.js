@@ -63,8 +63,7 @@ const auth =
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
           if (config.env === 'local') {
             return next(new ApiError(httpStatus.UNAUTHORIZED, 'Please provide a valid JWT token'));
-          }
-          else {
+          } else {
             return res.status(httpStatus.UNAUTHORIZED).json({
               success: false,
               message: 'Please provide a valid JWT token',

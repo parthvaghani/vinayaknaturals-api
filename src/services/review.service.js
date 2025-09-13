@@ -70,4 +70,3 @@ const listAllReviews = async ({ page = 1, limit = 10, search = '' }) => {
 };
 
 module.exports = { createReview, listProductReviews, listAllReviews };
-

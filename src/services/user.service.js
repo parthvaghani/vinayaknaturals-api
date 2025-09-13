@@ -109,7 +109,7 @@ const updateUserProfileById = async (userId, updateBody) => {
   if (updateObject.user_details && user.user_details) {
     updateObject.user_details = {
       ...user.user_details,
-      ...updateObject.user_details
+      ...updateObject.user_details,
     };
   }
 
@@ -171,7 +171,6 @@ const updateUserById = async (userId, updateBody) => {
  * @param {Number} otp
  * @returns {Promise<OTP>}
  */
-
 
 const clearToken = async (userId) => {
   const user = await getUserById(userId);
@@ -304,7 +303,7 @@ const updateUserData = async (id, data) => {
 const getAllAdminData = async () => {
   const userData = await User.find({ role: 'user' });
   return {
-    userData
+    userData,
   };
 };
 

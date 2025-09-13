@@ -1,7 +1,6 @@
 const { response } = require('express');
 const cartModel = require('../models/cart.model');
 
-
 const getUserCart = async (userId) => {
   const getData = await cartModel.find({ userId: userId, isOrdered: false }).populate('productId');
   return getData;
@@ -18,17 +17,13 @@ const getCartByDetails = async (payload) => {
     userId: userId,
     productId: productId,
     weight: weight,
-    isOrdered:false
+    isOrdered: false,
   });
   return cartItem;
 };
 const updateCart = async (_id, updateData) => {
   try {
-    return await cartModel.findByIdAndUpdate(
-      _id,
-      { $set: updateData },
-      { new: true, runValidators: true }
-    );
+    return await cartModel.findByIdAndUpdate(_id, { $set: updateData }, { new: true, runValidators: true });
   } catch (error) {
     response.error('Error updating cart:', error.message);
     return null;
@@ -36,15 +31,13 @@ const updateCart = async (_id, updateData) => {
 };
 
 const getCartById = async (cartId, userId) => {
-  const data = await cartModel.findOne({_id: cartId, userId});
+  const data = await cartModel.findOne({ _id: cartId, userId });
   return data;
 };
-
 
 const deleteCartById = async (cartId, userId) => {
   return await cartModel.findOneAndDelete({ _id: cartId, userId });
 };
-
 
 module.exports = {
   getUserCart,
@@ -52,5 +45,5 @@ module.exports = {
   getCartByDetails,
   updateCart,
   getCartById,
-  deleteCartById
+  deleteCartById,
 };

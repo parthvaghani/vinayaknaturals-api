@@ -16,4 +16,3 @@ router.get('/product-reviews/:productId', validate(validation.listByProduct), co
 router.get('/', validate(validation.listAll), controller.listAll);
 
 module.exports = router;
-
