@@ -1,6 +1,6 @@
-org: finflextech
-app: finflexapi
-service: finflex-dev-service
+org: aavkarmukhvas
+app: aavkarmukhvas
+service: aavkarmukhvas-service
 frameworkVersion: '3'
 
 provider:
@@ -8,19 +8,13 @@ provider:
   runtime: nodejs18.x
   region: ap-south-1
   stage: development
-  # Add VPC permissions to IAM role
+  # Add S3 permissions to IAM role
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:PutObject
       Resource:
         - arn:aws:s3:::${param:AWS_S3_BUCKET_NAME}/*
-    - Effect: Allow
-      Action:
-        - ec2:CreateNetworkInterface
-        - ec2:DescribeNetworkInterfaces
-        - ec2:DeleteNetworkInterface
-      Resource: "*"
 
 functions:
   handler:
@@ -31,13 +25,6 @@ functions:
       cors: true
     events:
       - httpApi: '*'
-    # VPC Configuration for Static IP
-    vpc:
-      securityGroupIds:
-        - Ref: LambdaSecurityGroup
-      subnetIds:
-        - Ref: PrivateSubnet1
-        - Ref: PrivateSubnet2
     environment:
       MONGODB_URL: ${param:MONGODB_URL}
       PORT: ${param:PORT}
@@ -49,56 +36,6 @@ functions:
       NODE_ENV: ${param:NODE_ENV}
       SMTP_HOST: ${param:SMTP_HOST}
       SMTP_PORT: ${param:SMTP_PORT}
-      TEJA_FINANCE_BASE_URL: ${param:TEJA_FINANCE_BASE_URL}
-      BANK_ACCESS_KEY: ${param:BANK_ACCESS_KEY}
-      BANK_MERCHANT_KEY: ${param:BANK_MERCHANT_KEY}
-      BANK_CLIENT_ID: ${param:BANK_CLIENT_ID}
-      BANK_API_PASSWORD: ${param:BANK_API_PASSWORD}
-      SME_BANK_TEST_CLIENT_ID: ${param:SME_BANK_TEST_CLIENT_ID}
-      SME_BANK_TEST_CLIENT_SECRET: ${param:SME_BANK_TEST_CLIENT_SECRET}
-      SME_BANK_TEST_BASE_URL: ${param:SME_BANK_TEST_BASE_URL}
-      SME_BANK_LIVE_BASE_URL: ${param:SME_BANK_LIVE_BASE_URL}
-      SME_BANK_LIVE_CLIENT_ID: ${param:SME_BANK_LIVE_CLIENT_ID}
-      SME_BANK_LIVE_CLIENT_SECRET: ${param:SME_BANK_LIVE_CLIENT_SECRET}
-      IS_SERVERLESS: ${param:IS_SERVERLESS}
-      SMTP_USERNAME: ${param:SMTP_USERNAME}
-      SMTP_PASSWORD: ${param:SMTP_PASSWORD}
-      EMAIL_FROM: ${param:EMAIL_FROM}
-      BASE_URL: ${param:BASE_URL}
-      FRONT_END_BASE_URL: ${param:FRONT_END_BASE_URL}
-      AWS_S3_BUCKET_NAME: ${param:AWS_S3_BUCKET_NAME}
-      AWS_S3_BASE_URL: ${param:AWS_S3_BASE_URL}
-      SLACK_WEBHOOK_URL: ${param:SLACK_WEBHOOK_URL}
-      SLACK_CHANNEL: ${param:SLACK_CHANNEL}
-      # Static IP environment variable
-      STATIC_IP:
-        Ref: StaticEIP
-  validationTransactionCron:
-    handler: src/services/validationTransaction.cron.lambdaHandler
-    events:
-      - schedule: cron(0/1 * * * ? *)
-    environment:
-      MONGODB_URL: ${param:MONGODB_URL}
-      PORT: ${param:PORT}
-      JWT_SECRET: ${param:JWT_SECRET}
-      JWT_ACCESS_EXPIRATION_MINUTES: ${param:JWT_ACCESS_EXPIRATION_MINUTES}
-      JWT_REFRESH_EXPIRATION_DAYS: ${param:JWT_REFRESH_EXPIRATION_DAYS}
-      JWT_RESET_PASSWORD_EXPIRATION_MINUTES: ${param:JWT_RESET_PASSWORD_EXPIRATION_MINUTES}
-      JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: ${param:JWT_VERIFY_EMAIL_EXPIRATION_MINUTES}
-      NODE_ENV: ${param:NODE_ENV}
-      SMTP_HOST: ${param:SMTP_HOST}
-      SMTP_PORT: ${param:SMTP_PORT}
-      TEJA_FINANCE_BASE_URL: ${param:TEJA_FINANCE_BASE_URL}
-      BANK_ACCESS_KEY: ${param:BANK_ACCESS_KEY}
-      BANK_MERCHANT_KEY: ${param:BANK_MERCHANT_KEY}
-      BANK_CLIENT_ID: ${param:BANK_CLIENT_ID}
-      BANK_API_PASSWORD: ${param:BANK_API_PASSWORD}
-      SME_BANK_TEST_CLIENT_ID: ${param:SME_BANK_TEST_CLIENT_ID}
-      SME_BANK_TEST_CLIENT_SECRET: ${param:SME_BANK_TEST_CLIENT_SECRET}
-      SME_BANK_TEST_BASE_URL: ${param:SME_BANK_TEST_BASE_URL}
-      SME_BANK_LIVE_BASE_URL: ${param:SME_BANK_LIVE_BASE_URL}
-      SME_BANK_LIVE_CLIENT_ID: ${param:SME_BANK_LIVE_CLIENT_ID}
-      SME_BANK_LIVE_CLIENT_SECRET: ${param:SME_BANK_LIVE_CLIENT_SECRET}
       IS_SERVERLESS: ${param:IS_SERVERLESS}
       SMTP_USERNAME: ${param:SMTP_USERNAME}
       SMTP_PASSWORD: ${param:SMTP_PASSWORD}
@@ -110,229 +47,6 @@ functions:
       SLACK_WEBHOOK_URL: ${param:SLACK_WEBHOOK_URL}
       SLACK_CHANNEL: ${param:SLACK_CHANNEL}
 
-resources:
-  Resources:
-    # VPC
-    FinFlexVPC:
-      Type: AWS::EC2::VPC
-      Properties:
-        CidrBlock: 10.0.0.0/16
-        EnableDnsHostnames: true
-        EnableDnsSupport: true
-        Tags:
-          - Key: Name
-            Value: finflex-dev-vpc
-
-    # Internet Gateway
-    FinFlexIGW:
-      Type: AWS::EC2::InternetGateway
-      Properties:
-        Tags:
-          - Key: Name
-            Value: finflex-dev-igw
-
-    IGWAttachment:
-      Type: AWS::EC2::VPCGatewayAttachment
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        InternetGatewayId:
-          Ref: FinFlexIGW
-
-    # Public Subnet (for NAT Gateway)
-    PublicSubnet:
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        CidrBlock: 10.0.1.0/24
-        AvailabilityZone: ap-south-1a
-        MapPublicIpOnLaunch: true
-        Tags:
-          - Key: Name
-            Value: finflex-dev-public-subnet
-
-    # Private Subnets (for Lambda)
-    PrivateSubnet1:
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        CidrBlock: 10.0.2.0/24
-        AvailabilityZone: ap-south-1a
-        Tags:
-          - Key: Name
-            Value: finflex-dev-private-subnet-1
-
-    PrivateSubnet2:
-      Type: AWS::EC2::Subnet
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        CidrBlock: 10.0.3.0/24
-        AvailabilityZone: ap-south-1b
-        Tags:
-          - Key: Name
-            Value: finflex-dev-private-subnet-2
-
-    # Elastic IP for NAT Gateway (Static IP)
-    StaticEIP:
-      Type: AWS::EC2::EIP
-      DependsOn: IGWAttachment
-      Properties:
-        Domain: vpc
-        Tags:
-          - Key: Name
-            Value: finflex-dev-static-ip
-
-    # NAT Gateway
-    NATGateway:
-      Type: AWS::EC2::NatGateway
-      Properties:
-        AllocationId:
-          Fn::GetAtt:
-            - StaticEIP
-            - AllocationId
-        SubnetId:
-          Ref: PublicSubnet
-        Tags:
-          - Key: Name
-            Value: finflex-dev-nat-gateway
-
-    # Public Route Table
-    PublicRouteTable:
-      Type: AWS::EC2::RouteTable
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        Tags:
-          - Key: Name
-            Value: finflex-dev-public-rt
-
-    PublicRoute:
-      Type: AWS::EC2::Route
-      DependsOn: IGWAttachment
-      Properties:
-        RouteTableId:
-          Ref: PublicRouteTable
-        DestinationCidrBlock: 0.0.0.0/0
-        GatewayId:
-          Ref: FinFlexIGW
-
-    PublicSubnetRTAssociation:
-      Type: AWS::EC2::SubnetRouteTableAssociation
-      Properties:
-        SubnetId:
-          Ref: PublicSubnet
-        RouteTableId:
-          Ref: PublicRouteTable
-
-    # Private Route Table
-    PrivateRouteTable:
-      Type: AWS::EC2::RouteTable
-      Properties:
-        VpcId:
-          Ref: FinFlexVPC
-        Tags:
-          - Key: Name
-            Value: finflex-dev-private-rt
-
-    PrivateRoute:
-      Type: AWS::EC2::Route
-      Properties:
-        RouteTableId:
-          Ref: PrivateRouteTable
-        DestinationCidrBlock: 0.0.0.0/0
-        NatGatewayId:
-          Ref: NATGateway
-
-    PrivateSubnet1RTAssociation:
-      Type: AWS::EC2::SubnetRouteTableAssociation
-      Properties:
-        SubnetId:
-          Ref: PrivateSubnet1
-        RouteTableId:
-          Ref: PrivateRouteTable
-
-    PrivateSubnet2RTAssociation:
-      Type: AWS::EC2::SubnetRouteTableAssociation
-      Properties:
-        SubnetId:
-          Ref: PrivateSubnet2
-        RouteTableId:
-          Ref: PrivateRouteTable
-
-    # Security Group for Lambda
-    LambdaSecurityGroup:
-      Type: AWS::EC2::SecurityGroup
-      Properties:
-        GroupDescription: Security group for FinFlex Lambda with static IP
-        VpcId:
-          Ref: FinFlexVPC
-        SecurityGroupEgress:
-          # HTTPS (Bank APIs, AWS services)
-          - IpProtocol: tcp
-            FromPort: 443
-            ToPort: 443
-            CidrIp: 0.0.0.0/0
-            Description: HTTPS outbound
-          # HTTP (if needed)
-          - IpProtocol: tcp
-            FromPort: 80
-            ToPort: 80
-            CidrIp: 0.0.0.0/0
-            Description: HTTP outbound
-          # MongoDB Atlas
-          - IpProtocol: tcp
-            FromPort: 27017
-            ToPort: 27017
-            CidrIp: 0.0.0.0/0
-            Description: MongoDB
-          # SMTP (Email)
-          - IpProtocol: tcp
-            FromPort: 587
-            ToPort: 587
-            CidrIp: 0.0.0.0/0
-            Description: SMTP TLS
-          - IpProtocol: tcp
-            FromPort: 465
-            ToPort: 465
-            CidrIp: 0.0.0.0/0
-            Description: SMTP SSL
-          # DNS
-          - IpProtocol: udp
-            FromPort: 53
-            ToPort: 53
-            CidrIp: 0.0.0.0/0
-            Description: DNS
-        Tags:
-          - Key: Name
-            Value: finflex-dev-lambda-sg
-
-  Outputs:
-    StaticIPAddress:
-      Description: Static IP address for bank API whitelisting
-      Value:
-        Ref: StaticEIP
-      Export:
-        Name: finflex-dev-static-ip
-
-    VPCId:
-      Description: VPC ID
-      Value:
-        Ref: FinFlexVPC
-      Export:
-        Name: finflex-dev-vpc-id
-
-    PrivateSubnets:
-      Description: Private subnet IDs
-      Value:
-        Fn::Join:
-          - ","
-          - - Ref: PrivateSubnet1
-            - Ref: PrivateSubnet2
-      Export:
-        Name: finflex-dev-private-subnets
 
 plugins:
   - serverless-offline
