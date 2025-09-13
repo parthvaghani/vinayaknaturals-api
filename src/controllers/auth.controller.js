@@ -1,32 +1,28 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../services');
-const config = require('../config/config');
 const ApiError = require('../utils/ApiError');
-
-const { default: axios } = require('axios');
-const logger = require('../config/logger');
 
 const register = catchAsync(async (req, res) => {
   try {
     const user = await userService.createNewUser(req.body);
 
-    try {
-      const slackPayload = {
-        channel: config.slack_channel,
-        username: 'Aavkar Backend',
-        text: `New user registered => ${JSON.stringify(user)}`,
-        icon_emoji: 'ghost',
-      };
-      await axios.post(config.slack_webhook_url, slackPayload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    } catch (error) {
-      logger.error('Slack notification failed:', error);
-      // Don't throw error for slack notification failure
-    }
+    // try {
+    //   const slackPayload = {
+    //     channel: config.slack_channel,
+    //     username: 'Aavkar Backend',
+    //     text: `New user registered => ${JSON.stringify(user)}`,
+    //     icon_emoji: 'ghost',
+    //   };
+    //   await axios.post(config.slack_webhook_url, slackPayload, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //   });
+    // } catch (error) {
+    //   logger.error('Slack notification failed:', error);
+    //   // Don't throw error for slack notification failure
+    // }
     const tokens = await tokenService.generateAuthTokens(user);
     let userObj = user;
     if (user.role === 'admin') {

@@ -29,8 +29,6 @@ const envVarsSchema = Joi.object()
     AWS_SECRET_ACCESS_KEY: Joi.string().description('aws secret access key'),
     AWS_S3_BUCKET_NAME: Joi.string().description('aws s3 bucket name'),
     AWS_S3_BASE_URL: Joi.string().description('aws s3 images base url'),
-    SLACK_WEBHOOK_URL: Joi.string().description('slack_webhook'),
-    SLACK_CHANNEL: Joi.string().description('slack_channel'),
     IS_SERVERLESS: Joi.boolean().default(false).description('Whether to run in serverless mode'),
   })
   .unknown();
@@ -73,7 +71,6 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
-  slack_webhook_url: envVars.SLACK_WEBHOOK_URL,
   isServerless: envVars.IS_SERVERLESS,
   frontEndBaseUrl: envVars.FRONT_END_BASE_URL,
   sellerRecipients: envVars.SELLER_RECIPIENTS ? envVars.SELLER_RECIPIENTS.split(',').map((email) => email.trim()) : [],
