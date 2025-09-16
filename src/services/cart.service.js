@@ -2,7 +2,12 @@ const { response } = require('express');
 const cartModel = require('../models/cart.model');
 
 const getUserCart = async (userId) => {
-  const getData = await cartModel.find({ userId: userId, isOrdered: false }).populate('productId');
+  const getData = await cartModel
+    .find({ userId: userId, isOrdered: false })
+    .populate({
+      path: 'productId',
+      populate: { path: 'category' },
+    });
   return getData;
 };
 
