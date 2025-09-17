@@ -16,7 +16,8 @@ const getOrderById = { params: orderIdParam };
 const cancelOrder = {
   params: orderIdParam,
   body: Joi.object().keys({
-    razorpayPaymentId: Joi.string().allow('').default(null),
+    // razorpayPaymentId: Joi.string().allow('').default(null),
+    reason: Joi.string().allow('').default(null),
   }),
 };
 

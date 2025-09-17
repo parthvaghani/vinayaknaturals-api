@@ -26,7 +26,7 @@ const sendMail = async (options) => {
 
 /* ---------- Helpers ---------- */
 const formatMoney = (val) => `₹${val}`;
-const formatDate = (date) => (date ? moment(date).format('D/M/YYYY, h:mm:ss a') : '');
+const formatDate = (date) => (date ? moment(date).utcOffset(330).format('DD/MM/YYYY, hh:mm:ss A') : '');
 const joinAddress = (a = {}) =>
   [a.addressLine1, a.addressLine2, a.city, `${a.state}${a.zip ? ` ${a.zip}` : ''}`, a.country].filter(Boolean).join('<br/>');
 
