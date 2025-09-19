@@ -93,9 +93,20 @@ const refreshTokens = catchAsync(async (req, res) => {
   res.send({ ...tokens });
 });
 
+const forgotPassword = catchAsync(async (req, res) => {
+  await authService.forgotPassword(req.body.email);
+  res.status(httpStatus.OK).send({
+    success: true,
+    message: 'We’ve sent a password reset link to your email. Please check your inbox for further instructions.'
+  });
+});
+
 const resetPassword = catchAsync(async (req, res) => {
   await authService.resetPassword(req.query.token, req.body.password);
-  res.status(httpStatus.NO_CONTENT).send();
+  res.status(httpStatus.OK).send({
+    success: true,
+    message: 'Password reset successfully',
+  });
 });
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
@@ -120,6 +131,7 @@ module.exports = {
   login,
   logout,
   refreshTokens,
+  forgotPassword,
   resetPassword,
   sendVerificationEmail,
   verifyEmail,

@@ -104,6 +104,16 @@ const refreshTokens = {
   }),
 };
 
+const forgotPassword = {
+  body: Joi.object().keys({
+    email: Joi.string().email().required().messages({
+      'string.empty': 'Email is required',
+      'any.required': 'Email is required',
+      'string.email': 'Please provide a valid email address',
+    }),
+  }),
+};
+
 const senEmailForRecover = {
   body: Joi.object().keys({
     email: Joi.string().email().required(),
@@ -113,10 +123,18 @@ const senEmailForRecover = {
 
 const resetPassword = {
   query: Joi.object().keys({
-    token: Joi.string().required(),
+    token: Joi.string().required().messages({
+      'string.empty': 'Reset token is required',
+      'any.required': 'Reset token is required',
+    }),
   }),
   body: Joi.object().keys({
-    password: Joi.string().required().custom(password),
+    password: Joi.string().required().min(6).custom(password).messages({
+      'string.empty': 'New password is required',
+      'any.required': 'New password is required',
+      'string.min': 'Password must be at least 6 characters long',
+      'any.custom': 'Password must contain at least one letter and one number',
+    }),
   }),
 };
 
@@ -157,6 +175,7 @@ module.exports = {
   login,
   logout,
   refreshTokens,
+  forgotPassword,
   senEmailForRecover,
   resetPassword,
   verifyEmail,

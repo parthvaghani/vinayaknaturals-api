@@ -26,6 +26,7 @@ const envVarsSchema = Joi.object()
     SMTP_SECURE: Joi.boolean().description('use TLS/SSL for SMTP (usually true for port 465)'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
     FRONT_END_BASE_URL: Joi.string().description('the from field in the emails sent by the app'),
+    FRONT_END_BASE_URL_ADMIN: Joi.string().description('the from field in the emails sent by the app'),
     AWS_ACCESS_KEY_ID: Joi.string().description('aws access key'),
     AWS_SECRET_ACCESS_KEY: Joi.string().description('aws secret access key'),
     AWS_S3_BUCKET_NAME: Joi.string().description('aws s3 bucket name'),
@@ -76,5 +77,6 @@ module.exports = {
   },
   isServerless: envVars.IS_SERVERLESS,
   frontEndBaseUrl: envVars.FRONT_END_BASE_URL,
+  frontEndBaseUrlAdmin: envVars.FRONT_END_BASE_URL_ADMIN,
   sellerRecipients: envVars.SELLER_RECIPIENTS ? envVars.SELLER_RECIPIENTS.split(',').map((email) => email.trim()) : [],
 };

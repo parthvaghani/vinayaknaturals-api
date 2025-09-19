@@ -2,6 +2,7 @@
 const httpStatus = require('http-status');
 const tokenService = require('./token.service');
 const userService = require('./user.service');
+const emailService = require('./email.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
@@ -157,6 +158,20 @@ const refreshAuth = async (refreshToken) => {
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate');
   }
+};
+
+/**
+ * Forgot password - send reset password email
+ * @param {string} email
+ * @returns {Promise}
+ */
+const forgotPassword = async (email) => {
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'The email you entered is incorrect or not registered.');
+  }
+  const resetPasswordToken = await tokenService.generateResetPasswordToken(user.email);
+  await emailService.sendResetPasswordEmail(user.email, resetPasswordToken, user.role);
 };
 
 /**
@@ -348,6 +363,7 @@ module.exports = {
   loginAdmin,
   logout,
   refreshAuth,
+  forgotPassword,
   resetPassword,
   verifyEmail,
   generateOTP,

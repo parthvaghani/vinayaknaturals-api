@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.post('/user/register', authController.registerUser);
 router.post('/login', validate(authValidation.login), authController.login);
+router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
+router.post('/reset-password', validate(authValidation.resetPassword), authController.resetPassword);
 
 module.exports = router;
 
@@ -415,10 +417,10 @@ module.exports = router;
 
 /**
  * @swagger
- * /auth/recover:
+ * /auth/forgot-password:
  *   post:
  *     summary: Forgot password
- *     description: An email will be sent to reset password.
+ *     description: Send a password reset email to the user's email address.
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -432,13 +434,37 @@ module.exports = router;
  *               email:
  *                 type: string
  *                 format: email
- *             example:
- *               email: fake@example.com
+ *                 description: User's email address
+ *                 example: user@example.com
  *     responses:
  *       "204":
- *         description: No content
+ *         description: Password reset email sent successfully
  *       "404":
- *         $ref: '#/components/responses/NotFound'
+ *         description: No user found with this email address
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 404
+ *                 message:
+ *                   type: string
+ *                   example: No users found with this email address
+ *       "400":
+ *         description: Invalid email format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: Please provide a valid email address
  */
 
 /**
@@ -446,13 +472,16 @@ module.exports = router;
  * /auth/reset-password:
  *   post:
  *     summary: Reset password
+ *     description: Reset user password using the token received via email.
  *     tags: [Auth]
  *     parameters:
  *       - in: query
  *         name: token
+ *         required: true
  *         schema:
  *           type: string
- *         description: The reset password token
+ *         description: The reset password token received via email
+ *         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *     requestBody:
  *       required: true
  *       content:
@@ -465,22 +494,38 @@ module.exports = router;
  *               password:
  *                 type: string
  *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *             example:
- *               password: password1
+ *                 minLength: 6
+ *                 description: New password (at least 6 characters with one letter and one number)
+ *                 example: newPassword123
  *     responses:
  *       "204":
- *         description: No content
- *       "401":
- *         description: Password reset failed
+ *         description: Password reset successfully
+ *       "400":
+ *         description: Invalid request data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
- *             example:
- *               code: 401
- *               message: Password reset failed
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 400
+ *                 message:
+ *                   type: string
+ *                   example: Reset token is required
+ *       "401":
+ *         description: Password reset failed (invalid or expired token)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: number
+ *                   example: 401
+ *                 message:
+ *                   type: string
+ *                   example: Password reset failed
  */
 
 /**

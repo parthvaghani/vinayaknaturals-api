@@ -170,6 +170,41 @@ const sendVerificationEmail = async (to, token) => {
   }
 };
 
+const sendResetPasswordEmail = async (to, token, role = 'user') => {
+  try {
+    const baseUrl = role === 'admin' ? config.frontEndBaseUrlAdmin : config.frontEndBaseUrl;
+    const path = role === 'admin' ? '/reset-password' : '/auth/reset-password';
+    const url = `${baseUrl}${path}?token=${encodeURIComponent(token)}`;
+    const resetPasswordHtml = wrapMail(`
+      <h2 style="text-align:center;">🔐 Reset Your Password</h2>
+      <p>Hi there,</p>
+      <p>We received a request to reset your password for your Aavkar Mukhwas account.</p>
+      <p>Click the button below to reset your password:</p>
+      <div style="text-align:center;margin:30px 0;">
+        <a href="${url}" style="background:#257112;color:white;padding:12px 24px;text-decoration:none;border-radius:6px;display:inline-block;font-weight:bold;">Reset Password</a>
+      </div>
+      <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+      <p style="word-break:break-all;color:#6b7280;font-size:14px;">${url}</p>
+      <p><strong>Important:</strong> This link will expire in 10 minutes for security reasons.</p>
+      <p>If you didn't request this password reset, please ignore this email. Your password will remain unchanged.</p>
+      <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
+        Thank you for choosing <strong>Aavkar Mukhwas</strong>.<br>
+        © ${new Date().getFullYear()} Aavkar Mukhwas. All rights reserved.
+      </p>
+    `);
+
+    await sendMail({
+      to,
+      subject: 'Reset Your Password - Aavkar Mukhwas',
+      text: `Reset your password by clicking this link: ${url}`,
+      html: resetPasswordHtml,
+    });
+  } catch (err) {
+    logger.error('Failed to send reset password email', err);
+    throw err;
+  }
+};
+
 const sendOrderPlacedEmailForBuyer = async (buyerEmail, order, buyerName) => {
   if (!buyerEmail) return;
   try {
@@ -301,6 +336,7 @@ const sendOrderStatusUpdateEmailForSeller = async (order, newStatus, buyerEmail,
 
 module.exports = {
   sendVerificationEmail,
+  sendResetPasswordEmail,
   sendOrderPlacedEmailForBuyer,
   sendOrderPlacedEmailForSeller,
   sendOrderStatusUpdateEmailForBuyer,
