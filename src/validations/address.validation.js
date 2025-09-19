@@ -24,7 +24,7 @@ const updateAddress = {
   params: addressIdParam,
   body: Joi.object()
     .keys({
-      label: Joi.string().valid('Home', 'Office', 'Other').optional(),
+      label: Joi.string().valid('Home', 'Work', 'Other').optional(),
       addressLine1: Joi.string().optional(),
       addressLine2: Joi.string().allow('').optional(),
       city: Joi.string().optional(),
