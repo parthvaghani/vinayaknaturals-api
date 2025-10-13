@@ -193,6 +193,14 @@ const createOrderFromCart = async ({ cartItems, userId, addressId, ReqBody }) =>
     ],
   });
 
+  // Increment coupon usage count if coupon was applied
+  if (ReqBody.couponId) {
+    await Coupon.updateOne(
+      { _id: ReqBody.couponId },
+      { $inc: { usageCount: 1 } }
+    );
+  }
+
   await Cart.updateMany({ userId, isOrdered: false }, { $set: { isOrdered: true } });
 
   try {
@@ -291,6 +299,7 @@ const allowedTransitions = {
 
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
+const { Coupon } = require('../models');
 
 const updateOrderStatus = async (id, newStatus, newPaymentStatus, note, trackingNumber, trackingLink, courierName, customMessage, role, requestUserId) => {
   // Only admin can update status (except cancel which has separate flow)

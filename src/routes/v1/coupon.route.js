@@ -1,21 +1,21 @@
 const express = require('express');
-// const validate = require('../../middlewares/validate');
+const validate = require('../../middlewares/validate');
 const validation = require('../../validations/coupon.validation');
 const couponController = require('../../controllers/coupon.controller');
 // const auth = require('../../middlewares/auth');
 
 const router = express.Router();
 
-const validate = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body, { abortEarly: true });
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.details[0].message,
-    });
-  }
-  next();
-};
+// const validate = (schema) => (req, res, next) => {
+//   const { error } = schema.validate(req.body, { abortEarly: true });
+//   if (error) {
+//     return res.status(400).json({
+//       success: false,
+//       message: error.details[0].message,
+//     });
+//   }
+//   next();
+// };
 
 router.post('/', validate(validation.couponValidationSchema), couponController.createCoupon);
 router.get('/', couponController.getCoupons);

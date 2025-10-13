@@ -90,7 +90,7 @@ const applyCoupon = async ({ couponCode, userId, orderQuantity, cartValue, level
   const discount = (cartValue * coupon.maxDiscountValue) / 100;
 
   // Increment usage count
-  coupon.usageCount += 1;
+  // coupon.usageCount += 1;
   await coupon.save();
 
   return { couponId: coupon._id, couponCode: coupon.couponCode, discount, percentage: `${coupon.maxDiscountValue}%` };
