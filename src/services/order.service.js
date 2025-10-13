@@ -110,7 +110,7 @@ const getAllOrders = async (query = {}) => {
   }
 };
 
-const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
+const createOrderFromCart = async ({ cartItems, userId, addressId, ReqBody }) => {
   const address = await Address.findOne({ _id: addressId, userId });
   if (!address) {
     const error = new Error('Address not found');
@@ -118,7 +118,6 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
     throw error;
   }
 
-  const cartItems = await Cart.find({ userId, isOrdered: false }).populate('productId');
   if (!cartItems || cartItems.length === 0) {
     const error = new Error('Cart is empty');
     error.statusCode = 400;
@@ -126,6 +125,24 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
   }
 
   // Build productsDetails array using cart's weightVariant and weight, and product's variants for price/discount
+  // First check all products' categories have pricingEnabled true
+  const categoryIds = cartItems
+    .map((item) => item.productId && item.productId.category)
+    .filter(Boolean);
+
+  const uniqueCategoryIds = [...new Set(categoryIds.map(id => id.toString()))];
+  const categories = await require('../models/productCategory.model').find({
+    _id: { $in: uniqueCategoryIds }
+  });
+
+  const nonPricedCategory = categories.find((cat) => cat.pricingEnabled === false);
+  if (nonPricedCategory) {
+    const error = new Error(`Order cannot be placed for category "${nonPricedCategory.name}" as pricing is disabled.`);
+    error.statusCode = 400;
+    throw error;
+  }
+
+  // Build productsDetails as before
   const productsDetails = cartItems.map((item) => {
     const product = item.productId;
     const weightVariant = item.weightVariant; // 'gm' or 'kg' from cart
