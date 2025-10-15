@@ -21,6 +21,10 @@ const createProduct = {
     category: Joi.string().custom(objectId).required().messages({
       'any.required': 'Product category is required',
     }),
+    product_slug: Joi.string().required().messages({
+      'string.empty': 'Product product is required',
+      'any.required': 'Product product is required',
+    }),
     name: Joi.string().required().messages({
       'string.empty': 'Product name is required',
       'any.required': 'Product name is required',
@@ -62,6 +66,7 @@ const updateProduct = {
   }),
   body: Joi.object().keys({
     category: Joi.string().custom(objectId).optional(),
+    product_slug: Joi.string().optional(),
     name: Joi.string().optional(),
     description: Joi.string().optional(),
     ingredients: Joi.array().items(Joi.string()).optional(),

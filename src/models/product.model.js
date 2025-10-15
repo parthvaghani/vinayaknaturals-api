@@ -10,6 +10,10 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema(
   {
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'ProductCategory', required: true },
+    product_slug:{
+      type:String,
+      required:true,
+    },
     name: { type: String, required: true },
     description: String,
     images: [
