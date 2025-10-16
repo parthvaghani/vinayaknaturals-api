@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const service = require('../services/cart.service');
 const { productService } = require('../services');
+const cartModel = require('../models/cart.model');
 
 // Get all cart items for user
 const getUserCartItems = catchAsync(async (req, res) => {
@@ -170,13 +171,7 @@ const addToCart = catchAsync(async (req, res) => {
 const updateCart = catchAsync(async (req, res) => {
   const user = req.user;
   if (req.body.length === 0) {
-    const deleteResult = await service.deleteUserAllCartItems(user?._id);
-    if (deleteResult.deletedCount === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Something Went Wrong In Delete All Cart Items',
-      });
-    }
+    await service.deleteUserCartItems(user?._id);
     return res.status(200).json({
       success: true,
       message: 'Cart items deleted successfully',

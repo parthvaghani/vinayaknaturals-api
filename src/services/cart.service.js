@@ -57,6 +57,10 @@ const deleteUserAllCartItems = async (userId) => {
   return await cartModel.deleteMany({ userId, isOrdered: false });
 };
 
+const deleteUserCartItems = async (userId) => {
+  return await cartModel.deleteOne({ userId, isOrdered: false });
+};
+
 const addItemsToCart = async (userId, insertData) => {
 
   await deleteUserAllCartItems(userId);
@@ -81,6 +85,6 @@ module.exports = {
   updateCart,
   getCartById,
   deleteCartById,
-  deleteUserAllCartItems,
+  deleteUserCartItems,
   addItemsToCart
 };
