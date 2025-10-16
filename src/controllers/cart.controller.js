@@ -170,9 +170,9 @@ const remove = catchAsync(async (req, res) => {
   const cartId = req.params.id;
   const userId = req.user._id;
 
-  if (req.user.role !== 'user') {
-    return res.status(403).json({ message: 'Only users can delete cart items' });
-  }
+  // if (req.user.role !== 'user') {
+  //   return res.status(403).json({ message: 'Only users can delete cart items' });
+  // }
 
   if (!cartId) {
     return res.status(400).json({ message: 'Cart ID is required' });
