@@ -33,7 +33,7 @@ const createOrder = catchAsync(async (req, res) => {
 
   const nonPricedCategory = categories.find((cat) => cat.pricingEnabled === false);
   if (nonPricedCategory) {
-    return res.status(400).json({ success: false, message: `Order cannot be placed because ${cartItems.map(item => item.productId.name).join(', ')} is currently unavailable for now.`});
+    return res.status(400).json({ success: false, message: `Order cannot be placed because ${cartItems.map(item => item.productId.name).join(', ')} is currently unavailable for now.` });
   }
   const created = await service.createOrderFromCart({ cartItems, userId, addressId: req.params.id, phoneNumber, ReqBody });
   return res.status(201).json({ success: true, message: 'Order placed successfully', data: created });
