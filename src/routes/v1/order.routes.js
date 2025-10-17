@@ -12,6 +12,7 @@ router.patch('/:id/status', auth(), validate(validation.updateStatus), controlle
 router.put('/:id', auth(), validate(validation.updateOrder), controller.updateOrder);
 router.get('/', auth(), controller.getMyOrders);
 router.get('/all', auth(), validate(validation.getAllOrders), controller.getAllOrders);
+router.get('/:id/invoice', auth(), validate(validation.downloadInvoice), controller.downloadInvoice);
 router.get('/:id', auth(), validate(validation.getOrderById), controller.getOrderById);
 
 module.exports = router;

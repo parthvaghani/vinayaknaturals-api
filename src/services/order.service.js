@@ -332,7 +332,7 @@ const createOrderFromCart = async ({userId, addressId, ReqBody }) => {
     populatedOrder.invoiceNumber = invoiceNumber;
 
     // Generate invoice PDF
-    const invoicePDFBuffer = await invoiceService.generateInvoicePDF(populatedOrder, buyerName);
+    const invoicePDFBuffer = await invoiceService.generateInvoicePDF(populatedOrder, buyerName, buyerEmail);
 
     // Send emails in parallel (non-blocking)
     await Promise.allSettled([
@@ -589,6 +589,30 @@ const updateOrder = async (id, updateData, userId, role) => {
   return updatedOrder;
 };
 
+const downloadInvoice = async (orderId, userId, role) => {
+  // Get order with populated fields
+  const order = await getOrderById(orderId, userId, role);
+
+  if (!order) {
+    const error = new Error('Order not found');
+    error.statusCode = 404;
+    throw error;
+  }
+
+  // Get buyer details
+  const buyerName = order.userId?.user_details?.name || 'Customer';
+  const buyerEmail = order.userId?.email || 'Customer';
+
+  // Generate invoice PDF
+  const pdfBuffer = invoiceService.generateInvoicePDF(order, buyerName, buyerEmail);
+
+  return {
+    pdfBuffer,
+    invoiceNumber: order.invoiceNumber,
+    order,
+  };
+};
+
 module.exports = {
   getAllOrders,
   createOrderFromCart,
@@ -597,4 +621,5 @@ module.exports = {
   cancelOrder,
   updateOrderStatus,
   updateOrder,
+  downloadInvoice,
 };

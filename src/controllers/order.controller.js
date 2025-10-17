@@ -120,6 +120,19 @@ const updateOrder = catchAsync(async (req, res) => {
   return res.status(200).json({ success: true, message: 'Order updated successfully', data: updated });
 });
 
+const downloadInvoice = catchAsync(async (req, res) => {
+  const userId = req.user && req.user._id;
+  const userRole = req.user && req.user.role;
+  const { pdfBuffer, invoiceNumber, order } = await service.downloadInvoice(req.params.id, userId, userRole);
+
+  // Set headers for PDF download
+  res.setHeader('Content-Type', 'application/pdf');
+  res.setHeader('Content-Disposition', `attachment; filename="invoice-${invoiceNumber || order._id}.pdf"`);
+  res.setHeader('Content-Length', pdfBuffer.length);
+
+  return res.send(pdfBuffer);
+});
+
 module.exports = {
   getAllOrders,
   createOrder,
@@ -128,4 +141,5 @@ module.exports = {
   cancelOrder,
   updateStatus,
   updateOrder,
+  downloadInvoice,
 };

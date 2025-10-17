@@ -81,6 +81,10 @@ const updateOrder = {
   }),
 };
 
+const downloadInvoice = {
+  params: orderIdParam,
+};
+
 module.exports = {
   createOrder,
   getOrderById,
@@ -88,4 +92,5 @@ module.exports = {
   getAllOrders,
   updateStatus,
   updateOrder,
+  downloadInvoice,
 };

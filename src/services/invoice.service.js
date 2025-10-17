@@ -73,7 +73,7 @@ const joinAddress = (address = {}) => {
  * @param {string} buyerName - Customer name
  * @returns {Buffer} PDF buffer
  */
-const generateInvoicePDF = (order, buyerName) => {
+const generateInvoicePDF = (order, buyerName, buyerEmail) => {
   try {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -133,16 +133,16 @@ const generateInvoicePDF = (order, buyerName) => {
     doc.text(`Invoice #: ${order.invoiceNumber || 'N/A'}`, pageWidth - rightMargin, 32, { align: 'right' });
     doc.text(`Date: ${formatDate(order.createdAt)}`, pageWidth - rightMargin, 37, { align: 'right' });
     doc.setTextColor(...successGreen);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`Status: ${order.orderStatus?.toUpperCase() || 'PLACED'}`, pageWidth - rightMargin, 42, { align: 'right' });
+    // doc.setFont('helvetica', 'bold');
+    // doc.text(`Status: ${order.orderStatus?.toUpperCase() || 'PLACED'}`, pageWidth - rightMargin, 42, { align: 'right' });
     doc.setTextColor(...foregroundGreen);
     doc.setFont('helvetica', 'normal');
-    doc.text(`Payment: ${order.paymentMethod?.toUpperCase() || 'UNPAID'}`, pageWidth - rightMargin, 47, { align: 'right' });
+    doc.text(`Payment: ${order.paymentMethod?.toUpperCase() || 'UNPAID'}`, pageWidth - rightMargin, 42, { align: 'right' });
 
     // Separator line with theme color
     doc.setDrawColor(...primaryGreen);
     doc.setLineWidth(0.8);
-    doc.line(leftMargin, 55, pageWidth - rightMargin, 55);
+    doc.line(leftMargin, 52, pageWidth - rightMargin, 52);
 
     // Customer Information & Shipping Address (two columns)
     let yPos = 68;
@@ -159,7 +159,7 @@ const generateInvoicePDF = (order, buyerName) => {
     yPos += 8;
     doc.text(`Name: ${buyerName || 'N/A'}`, leftMargin, yPos);
     yPos += 5;
-    doc.text(`Email: ${order.email || 'N/A'}`, leftMargin, yPos);
+    doc.text(`Email: ${buyerEmail || 'N/A'}`, leftMargin, yPos);
     yPos += 5;
     doc.text(`Phone: ${order.phoneNumber || 'N/A'}`, leftMargin, yPos);
 
