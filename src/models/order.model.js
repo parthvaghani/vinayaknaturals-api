@@ -146,6 +146,11 @@ const orderSchema = new mongoose.Schema(
       discountAmount: { type: Number, default: null },
       discountPercentage: { type: String, default: null },
     },
+    invoiceNumber: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
   },
   {
     timestamps: true,

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Lenovo User/Desktop/**)",
+      "Read(//c/Users/Lenovo User/Downloads/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

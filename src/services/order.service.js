@@ -2,7 +2,7 @@ const Order = require('../models/order.model');
 const Address = require('../models/address.model');
 const Cart = require('../models/cart.model');
 const User = require('../models/user.model');
-const { emailService, productService } = require('./index');
+const { emailService, productService, invoiceService } = require('./index');
 const mongoose = require('mongoose');
 
 /**
@@ -324,10 +324,20 @@ const createOrderFromCart = async ({userId, addressId, ReqBody }) => {
     const buyerEmail = buyer && buyer.email ? buyer.email : null;
     const buyerName = buyer && buyer.user_details && buyer.user_details.name ? buyer.user_details.name : '';
 
+    // Generate invoice number and save to order
+    const invoiceNumber = await invoiceService.generateInvoiceNumber();
+    await Order.findByIdAndUpdate(orderDoc._id, { invoiceNumber });
+
+    // Update populatedOrder with invoice number
+    populatedOrder.invoiceNumber = invoiceNumber;
+
+    // Generate invoice PDF
+    const invoicePDFBuffer = await invoiceService.generateInvoicePDF(populatedOrder, buyerName);
+
     // Send emails in parallel (non-blocking)
     await Promise.allSettled([
-      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount),
-      emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount),
+      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer),
+      emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer),
     ]);
   } catch (error) {
     return error;

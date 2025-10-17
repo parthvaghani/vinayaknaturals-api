@@ -176,30 +176,52 @@ const buildOrderTable = (rows, totals, total, couponDiscount) => {
 };
 
 
-const sendOrderPlacedEmailForBuyer = async (buyerEmail, order, buyerName, couponDiscount) => {
+const sendOrderPlacedEmailForBuyer = async (buyerEmail, order, buyerName, couponDiscount, invoicePDFBuffer) => {
   if (!buyerEmail) return;
   try {
-    await sendMail({
+    const mailOptions = {
       to: buyerEmail,
       subject: 'Your order has been placed successfully',
       text: formatOrderSummary(order, couponDiscount),
       html: buildBuyerOrderHtml(order, buyerName, couponDiscount),
-    });
+    };
+
+    // Add PDF attachment if provided
+    if (invoicePDFBuffer) {
+      mailOptions.attachments = [{
+        filename: `invoice-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.pdf`,
+        content: invoicePDFBuffer,
+        contentType: 'application/pdf'
+      }];
+    }
+
+    await sendMail(mailOptions);
   } catch (err) {
     logger.error('Failed to send order email to buyer', err);
   }
 };
 
 
-const sendOrderPlacedEmailForSeller = async (buyerEmail, order, buyerName, couponDiscount) => {
+const sendOrderPlacedEmailForSeller = async (buyerEmail, order, buyerName, couponDiscount, invoicePDFBuffer) => {
   if (!buyerEmail) return;
   try {
-    await sendMail({
+    const mailOptions = {
       to: SELLER_RECIPIENTS.join(','),
       subject: 'New order received',
       text: formatOrderSummary(order, couponDiscount),
       html: buildSellerOrderHtml(buyerEmail, order, buyerName, couponDiscount),
-    });
+    };
+
+    // Add PDF attachment if provided
+    if (invoicePDFBuffer) {
+      mailOptions.attachments = [{
+        filename: `invoice-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.pdf`,
+        content: invoicePDFBuffer,
+        contentType: 'application/pdf'
+      }];
+    }
+
+    await sendMail(mailOptions);
   } catch (err) {
     logger.error('Failed to send order email to seller(s)', err);
   }

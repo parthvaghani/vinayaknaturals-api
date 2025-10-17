@@ -10,3 +10,4 @@ module.exports.cartService = require('./cart.service');
 module.exports.addressService = require('./address.service');
 module.exports.emailService = require('./email.service');
 module.exports.couponService = require('./coupon.service');
+module.exports.invoiceService = require('./invoice.service');
