@@ -2,7 +2,7 @@ const { jsPDF } = require('jspdf');
 const Order = require('../models/order.model');
 const moment = require('moment');
 const logger = require('../config/logger');
-const axios = require('axios');
+const { logoBase64Image } = require('../config/constants');
 
 /**
  * Generate the next sequential invoice number
@@ -95,17 +95,13 @@ const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
     const rightMargin = 10;
 
     let logoWidth = 0;
-    const logoUrl = 'https://aavkarmukhwas.github.io/images/aavkar-logo/logo.png';
     try {
-      const response = await axios.get(logoUrl, { responseType: 'arraybuffer' });
-      // eslint-disable-next-line no-undef
-      const logoData = Buffer.from(response.data, 'binary').toString('base64');
-      doc.addImage(`data:image/png;base64,${logoData}`, 'PNG', leftMargin, 15, 22, 22);
+      doc.addImage(logoBase64Image, 'PNG', leftMargin, 15, 22, 22);
       logoWidth = 27;
     } catch (err) {
       logger.error('Failed to fetch logo from URL:', err.message);
     }
-    logoWidth = 27; // Reserve space as if logo is present so layout remains unchanged
+    logoWidth = 27;
 
     // Company name and tagline (top left, after logo) - aligned with invoice details
     doc.setTextColor(...primaryGreen);
