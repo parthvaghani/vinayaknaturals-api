@@ -133,6 +133,46 @@ const downloadInvoice = catchAsync(async (req, res) => {
   return res.send(pdfBuffer);
 });
 
+const createPosOrder = catchAsync(async (req, res) => {
+  const ReqBody = req.body;
+  const userId = req.user && req.user._id;
+
+  if (ReqBody.cart.length === 0) {
+    return res.status(400).json({ success: false, message: 'Cart is empty' });
+  }
+
+  // Validate all products exist
+  for (const item of ReqBody.cart) {
+    const findProduct = await productService.getProductById(item?.productId);
+    if (!findProduct) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
+  }
+
+  const categoryIds = ReqBody.cart
+    .map((item) => item.productId && item.category)
+    .filter(Boolean);
+
+  const uniqueCategoryIds = [...new Set(categoryIds.map(id => id.toString()))];
+  const categories = await productCategoryModel.find({
+    _id: { $in: uniqueCategoryIds }
+  });
+
+  const nonPricedCategory = categories.find((cat) => cat.pricingEnabled === false);
+  if (nonPricedCategory) {
+    return res.status(400).json({
+      success: false,
+      message: `Order cannot be placed because ${ReqBody.cart.map(item => item.productId && item.productId.name).filter(Boolean).join(', ')} is currently unavailable for now.`
+    });
+  }
+
+  const created = await service.createPosOrder({ userId, ReqBody });
+  return res.status(201).json({ success: true, message: 'POS Order placed successfully', data: created });
+});
+
 module.exports = {
   getAllOrders,
   createOrder,
@@ -142,4 +182,5 @@ module.exports = {
   updateStatus,
   updateOrder,
   downloadInvoice,
+  createPosOrder,
 };

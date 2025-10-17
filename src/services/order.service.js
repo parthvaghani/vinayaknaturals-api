@@ -235,7 +235,7 @@ const getAllOrders = async (query = {}) => {
 //   return { orderDoc, ReqBody };
 // };
 
-const createOrderFromCart = async ({userId, addressId, ReqBody }) => {
+const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
   const address = await Address.findOne({ _id: addressId, userId });
   if (!address) {
     const error = new Error('Address not found');
@@ -613,6 +613,97 @@ const downloadInvoice = async (orderId, userId, role) => {
   };
 };
 
+const createPosOrder = async ({ userId, ReqBody }) => {
+  const productsDetails = await Promise.all(ReqBody?.cart?.map(async (item) => {
+    const weightVariant = item.weightVariant; // 'gm' or 'kg' from cart
+    const weight = item.weight; // e.g. '200' or '1'
+    let pricePerUnit = 0;
+    let discount = 0;
+    const findProduct = await productService.getProductById(item.productId);
+
+    if (findProduct.variants && findProduct.variants[weightVariant] && Array.isArray(findProduct.variants[weightVariant])) {
+      const foundVariant = findProduct.variants[weightVariant].find(
+        (v) => v && v.weight && v.weight.toString() === weight.toString(),
+      );
+      if (foundVariant) {
+        pricePerUnit = typeof foundVariant.price === 'number' ? foundVariant.price : 0;
+        discount = typeof foundVariant.discount === 'number' ? foundVariant.discount : 0;
+      }
+    }
+
+    return {
+      productId: item.productId,
+      weightVariant: weightVariant,
+      weight: weight,
+      pricePerUnit,
+      discount,
+      totalUnit: item.totalProduct,
+    };
+  }));
+
+  const orderDoc = await Order.create({
+    userId,
+    address: {
+      addressLine1: ReqBody.address.addressLine1,
+      addressLine2: ReqBody.address.addressLine2 || '',
+      city: ReqBody.address.city,
+      state: ReqBody.address.state,
+      zip: ReqBody.address.zip,
+      country: ReqBody.address.country || 'IND',
+    },
+    productsDetails,
+    phoneNumber: ReqBody.phoneNumber,
+    applyCoupon: {
+      couponId: ReqBody.couponId,
+      discountAmount: ReqBody.discountAmount,
+      discountPercentage: ReqBody.discountPercentage,
+    },
+    posOrder: true,
+    statusHistory: [
+      { status: 'placed', updatedBy: 'user', note: 'POS Order placed' }
+    ],
+  });
+
+  // Increment coupon usage count AND log usage if coupon was applied
+  if (ReqBody.couponId) {
+    await Coupon.updateOne(
+      { _id: ReqBody.couponId },
+      {
+        $inc: { usageCount: 1 },
+        $push: {
+          usageLog: {
+            userId: userId,
+            usedAt: new Date(),
+            orderId: orderDoc._id,
+          }
+        }
+      }
+    );
+  }
+
+  try {
+    // Populate for email templates (product names)
+    const populatedOrder = await Order.findById(orderDoc._id)
+      .populate({ path: 'productsDetails.productId', select: 'name' })
+      .lean();
+
+    // Fetch buyer details
+    const buyer = await User.findById(userId).select('email user_details.name').lean();
+    const buyerEmail = buyer && buyer.email ? buyer.email : null;
+    const buyerName = buyer && buyer.user_details && buyer.user_details.name ? buyer.user_details.name : '';
+
+    // Send emails in parallel (non-blocking)
+    await Promise.allSettled([
+      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount),
+      emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount),
+    ]);
+  } catch (error) {
+    return error;
+  }
+
+  return { orderDoc, ReqBody };
+};
+
 module.exports = {
   getAllOrders,
   createOrderFromCart,
@@ -622,4 +713,5 @@ module.exports = {
   updateOrderStatus,
   updateOrder,
   downloadInvoice,
+  createPosOrder,
 };

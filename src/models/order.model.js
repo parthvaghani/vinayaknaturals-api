@@ -151,6 +151,10 @@ const orderSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
     },
+    posOrder: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true,

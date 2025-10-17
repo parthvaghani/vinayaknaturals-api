@@ -85,6 +85,36 @@ const downloadInvoice = {
   params: orderIdParam,
 };
 
+const createPosOrder = {
+  body: Joi.object().keys({
+    cart: Joi.array()
+      .items(
+        Joi.object().keys({
+          productId: Joi.string().custom(objectId).required(),
+          weightVariant: Joi.string().required(),
+          weight: Joi.string().required(),
+          totalProduct: Joi.number().required(),
+        }),
+      )
+      .min(1)
+      .required(),
+    address: Joi.object()
+      .keys({
+        addressLine1: Joi.string().required(),
+        addressLine2: Joi.string().allow('').optional(),
+        city: Joi.string().required(),
+        state: Joi.string().required(),
+        zip: Joi.string().required(),
+        country: Joi.string().default('IND'),
+      })
+      .required(),
+    phoneNumber: Joi.string().required(),
+    couponId: Joi.string().custom(objectId).optional(),
+    discountAmount: Joi.number().default(0),
+    discountPercentage: Joi.number().default(0),
+  }),
+};
+
 module.exports = {
   createOrder,
   getOrderById,
@@ -93,4 +123,5 @@ module.exports = {
   updateStatus,
   updateOrder,
   downloadInvoice,
+  createPosOrder,
 };
