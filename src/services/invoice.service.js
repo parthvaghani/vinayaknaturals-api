@@ -3,6 +3,7 @@ const Order = require('../models/order.model');
 const moment = require('moment');
 const fs = require('fs');
 const path = require('path');
+const logger = require('../config/logger');
 
 /**
  * Generate the next sequential invoice number
@@ -97,13 +98,14 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
     // Load and add logo (top left, before company name) - smaller size
     let logoWidth = 0;
     try {
+      // eslint-disable-next-line no-undef
       const logoPath = path.join(__dirname, '../Helpers/logo.png');
       const logoData = fs.readFileSync(logoPath, { encoding: 'base64' });
       doc.addImage(`data:image/png;base64,${logoData}`, 'PNG', leftMargin, 15, 22, 22);
       logoWidth = 27; // Logo width + spacing
     } catch (err) {
       // Logo loading failed, continue without it
-      console.warn('Failed to load logo:', err.message);
+      logger.error('Failed to load logo:', err.message);
     }
 
     // Company name and tagline (top left, after logo) - aligned with invoice details
@@ -189,27 +191,49 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
       yPos += 5;
     });
 
-    // Product Table
+    // Helper function to add table header
+    const addTableHeader = (currentY) => {
+      doc.setFillColor(...lightMutedGreen);
+      doc.rect(leftMargin, currentY, pageWidth - leftMargin - rightMargin, 8, 'F');
+
+      doc.setTextColor(...foregroundGreen);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Product', leftMargin + 5, currentY + 5);
+      doc.text('Weight', 90, currentY + 5);
+      doc.text('Unit Price', 120, currentY + 5);
+      doc.text('Discount', 150, currentY + 5);
+      doc.text('Qty', 175, currentY + 5);
+      doc.text('Total', pageWidth - rightMargin - 5, currentY + 5, { align: 'right' });
+
+      return currentY + 12; // Return yPos after header
+    };
+
+    // Helper function to add full footer (only for last page)
+    const addFooter = () => {
+      doc.setTextColor(...textGray);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.text('Thank you for shopping with Aavkar Mukhwas!', pageWidth / 2, pageHeight - 25, { align: 'center' });
+      doc.text('Plot No 26, Swastik Raw House, Near Shivdhara Circle, D Mart Road, Mota Varachha, Surat 394101 Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
+      doc.text('Phone: +91 81288 26764 | Email: sales@aavkarmukhwas.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      doc.setTextColor(...primaryGreen);
+      doc.setFontSize(7);
+      doc.text('\u00A9 Aavkar Mukhwas. All rights reserved.', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    };
+
+    // Product Table - Starting position
     yPos = 108;
+    const rowHeight = 7;
+    const footerHeight = 35; // Space needed for footer branding
 
-    // Table header with theme colors
-    doc.setFillColor(...lightMutedGreen);
-    doc.rect(leftMargin, yPos, pageWidth - leftMargin - rightMargin, 8, 'F');
+    // Add initial table header
+    yPos = addTableHeader(yPos);
 
-    doc.setTextColor(...foregroundGreen);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Product', leftMargin + 5, yPos + 5);
-    doc.text('Weight', 90, yPos + 5);
-    doc.text('Unit Price', 120, yPos + 5);
-    doc.text('Discount', 150, yPos + 5);
-    doc.text('Qty', 175, yPos + 5);
-    doc.text('Total', pageWidth - rightMargin - 5, yPos + 5, { align: 'right' });
-
-    // Table rows
-    yPos += 12;
+    // Table rows - render products without aggressive pagination
     let subtotal = 0;
     let totalDiscount = 0;
+    let rowIndex = 0;
 
     (order.productsDetails || []).forEach((item, index) => {
       const qty = parseFloat(item.totalUnit) || 0;
@@ -220,19 +244,30 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
       subtotal += price * qty;
       totalDiscount += discount * qty;
 
+      // Only paginate if we're VERY close to the bottom (leave ~20 for summary + footer)
+      if (yPos + rowHeight > pageHeight - 20) {
+        // Add new page without footer
+        doc.addPage();
+
+        // Reset yPos and add header on new page
+        yPos = 20;
+        yPos = addTableHeader(yPos);
+        rowIndex = 0; // Reset row index for alternating colors
+      }
+
       // Alternate row background
-      if (index % 2 === 0) {
+      if (rowIndex % 2 === 0) {
         doc.setFillColor(250, 250, 250);
-        doc.rect(leftMargin, yPos - 4, pageWidth - leftMargin - rightMargin, 7, 'F');
+        doc.rect(leftMargin, yPos - 4, pageWidth - leftMargin - rightMargin, rowHeight, 'F');
       }
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(...foregroundGreen);
 
-      // Product name - without truncation, properly displayed
+      // Product name - truncated if too long
       const productName = item?.productId?.name || item.productId || 'N/A';
-      const truncatedName = productName.length > 30 ? productName.substring(0, 27) + '...' : productName;
+      const truncatedName = productName.length > 30 ? `${productName.substring(0, 27)  }...` : productName;
       doc.text(truncatedName, leftMargin + 5, yPos);
 
       // Weight
@@ -258,8 +293,31 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
       doc.setFont('helvetica', 'bold');
       doc.text(formatMoney(lineTotal), pageWidth - rightMargin - 5, yPos, { align: 'right' });
 
-      yPos += 7;
+      yPos += rowHeight;
+      rowIndex++;
     });
+
+    // Calculate final totals and summary height
+    const couponDiscount = parseFloat(order.applyCoupon?.discountAmount) || 0;
+    const shippingCharge = parseFloat(order.shippingCharge) || 0;
+    const totalSavings = totalDiscount + couponDiscount;
+    const grandTotal = subtotal - totalSavings + shippingCharge;
+
+    // Estimate summary section height
+    let summaryHeight = 5 + 8; // Initial spacing + first line
+    summaryHeight += 6; // Subtotal
+    if (totalDiscount > 0) summaryHeight += 6; // Product Discount
+    if (couponDiscount > 0) summaryHeight += 6; // Coupon Discount
+    summaryHeight += 6; // Shipping Charge
+    if (totalSavings > 0) summaryHeight += 8; // Total Savings
+    summaryHeight += 12; // Grand Total with line
+
+    // Check if summary + footer fits on current page
+    if (yPos + summaryHeight + footerHeight > pageHeight - 5) {
+      // Add new page for summary
+      doc.addPage();
+      yPos = 20;
+    }
 
     // Summary section
     yPos += 5;
@@ -268,16 +326,11 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
     doc.line(pageWidth / 2, yPos, pageWidth - rightMargin, yPos);
     yPos += 8;
 
-    const couponDiscount = parseFloat(order.applyCoupon?.discountAmount) || 0;
-    const shippingCharge = 0; // Add if you have shipping charges
-    const totalSavings = totalDiscount + couponDiscount;
-    const grandTotal = subtotal - totalSavings + shippingCharge;
-
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(...foregroundGreen);
 
-    const summaryLabelX = pageWidth / 2 + 10;
+    const summaryLabelX = (pageWidth / 2) + 10;
     const summaryValueX = pageWidth - rightMargin - 5;
 
     // Subtotal
@@ -327,18 +380,11 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
     doc.text('Total Amount:', summaryLabelX, yPos + 4);
     doc.text(formatMoney(grandTotal), summaryValueX, yPos + 4, { align: 'right' });
 
-    // Footer
-    doc.setTextColor(...textGray);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.text('Thank you for shopping with Aavkar Mukhwas!', pageWidth / 2, pageHeight - 25, { align: 'center' });
-    doc.text('Plot No 26, Swastik Raw House, Near Shivdhara Circle, D Mart Road, Mota Varachha, Surat 394101 Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
-    doc.text('Phone: +91 81288 26764 | Email: sales@aavkarmukhwas.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
-    doc.setTextColor(...primaryGreen);
-    doc.setFontSize(7);
-    doc.text('\u00A9 Aavkar Mukhwas. All rights reserved.', pageWidth / 2, pageHeight - 10, { align: 'center' });
+    // Add footer branding only to the last page
+    addFooter();
 
     // Convert to buffer
+    // eslint-disable-next-line no-undef
     return Buffer.from(doc.output('arraybuffer'));
   } catch (error) {
     throw new Error(`Failed to generate invoice PDF: ${error.message}`);
