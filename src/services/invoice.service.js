@@ -1,9 +1,8 @@
 const { jsPDF } = require('jspdf');
 const Order = require('../models/order.model');
 const moment = require('moment');
-const fs = require('fs');
-const path = require('path');
 const logger = require('../config/logger');
+const axios = require('axios');
 
 /**
  * Generate the next sequential invoice number
@@ -74,7 +73,7 @@ const joinAddress = (address = {}) => {
  * @param {string} buyerName - Customer name
  * @returns {Buffer} PDF buffer
  */
-const generateInvoicePDF = (order, buyerName, buyerEmail) => {
+const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
   try {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -95,18 +94,18 @@ const generateInvoicePDF = (order, buyerName, buyerEmail) => {
     const leftMargin = 10;
     const rightMargin = 10;
 
-    // Load and add logo (top left, before company name) - smaller size
     let logoWidth = 0;
+    const logoUrl = 'https://aavkarmukhwas.github.io/images/aavkar-logo/logo.png';
     try {
+      const response = await axios.get(logoUrl, { responseType: 'arraybuffer' });
       // eslint-disable-next-line no-undef
-      const logoPath = path.join(__dirname, '../Helpers/logo.png');
-      const logoData = fs.readFileSync(logoPath, { encoding: 'base64' });
+      const logoData = Buffer.from(response.data, 'binary').toString('base64');
       doc.addImage(`data:image/png;base64,${logoData}`, 'PNG', leftMargin, 15, 22, 22);
-      logoWidth = 27; // Logo width + spacing
+      logoWidth = 27;
     } catch (err) {
-      // Logo loading failed, continue without it
-      logger.error('Failed to load logo:', err.message);
+      logger.error('Failed to fetch logo from URL:', err.message);
     }
+    logoWidth = 27; // Reserve space as if logo is present so layout remains unchanged
 
     // Company name and tagline (top left, after logo) - aligned with invoice details
     doc.setTextColor(...primaryGreen);

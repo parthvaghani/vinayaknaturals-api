@@ -604,7 +604,7 @@ const downloadInvoice = async (orderId, userId, role) => {
   const buyerEmail = order.userId?.email || 'Customer';
 
   // Generate invoice PDF
-  const pdfBuffer = invoiceService.generateInvoicePDF(order, buyerName, buyerEmail);
+  const pdfBuffer = await invoiceService.generateInvoicePDF(order, buyerName, buyerEmail);
 
   return {
     pdfBuffer,
