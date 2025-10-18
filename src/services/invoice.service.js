@@ -94,14 +94,14 @@ const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
     const leftMargin = 10;
     const rightMargin = 10;
 
-    let logoWidth = 0;
-    try {
-      doc.addImage(logoBase64Image, 'PNG', leftMargin, 15, 22, 22);
-      logoWidth = 27;
-    } catch (err) {
-      logger.error('Failed to fetch logo from URL:', err.message);
-    }
-    logoWidth = 27;
+    const logoWidth = 0;
+    // try {
+    //   doc.addImage(logoBase64Image, 'PNG', leftMargin, 15, 22, 22);
+    //   logoWidth = 27;
+    // } catch (err) {
+    //   logger.error('Failed to fetch logo from URL:', err.message);
+    // }
+    // logoWidth = 27;
 
     // Company name and tagline (top left, after logo) - aligned with invoice details
     doc.setTextColor(...primaryGreen);
