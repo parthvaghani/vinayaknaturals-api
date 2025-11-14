@@ -47,7 +47,7 @@ module.exports = {
   baseUrl: envVars.BASE_URL,
   port: envVars.PORT,
   mongoose: {
-    url: `${envVars.MONGODB_URL}aavkar-development`,
+    url: `${envVars.MONGODB_URL}drizzlebites-development`,
     options: {},
   },
   jwt: {

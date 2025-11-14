@@ -107,7 +107,7 @@ const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
     doc.setTextColor(...primaryGreen);
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
-    doc.text('Aavkar Mukhwas', leftMargin + logoWidth, 25);
+    doc.text('Drizzle Bites', leftMargin + logoWidth, 25);
 
     doc.setTextColor(...foregroundGreen);
     doc.setFontSize(10);
@@ -209,12 +209,12 @@ const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
       doc.setTextColor(...textGray);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
-      doc.text('Thank you for shopping with Aavkar Mukhwas!', pageWidth / 2, pageHeight - 25, { align: 'center' });
+      doc.text('Thank you for shopping with Drizzle Bites!', pageWidth / 2, pageHeight - 25, { align: 'center' });
       doc.text('Plot No 26, Swastik Raw House, Near Shivdhara Circle, D Mart Road, Mota Varachha, Surat 394101 Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
-      doc.text('Phone: +91 81288 26764 | Email: sales@aavkarmukhwas.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
+      doc.text('Phone: +91 81288 26764 | Email: venturedigitalindia@gmail.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
       doc.setTextColor(...primaryGreen);
       doc.setFontSize(7);
-      doc.text('\u00A9 Aavkar Mukhwas. All rights reserved.', pageWidth / 2, pageHeight - 10, { align: 'center' });
+      doc.text('\u00A9 Drizzle Bites. All rights reserved.', pageWidth / 2, pageHeight - 10, { align: 'center' });
     };
 
     // Product Table - Starting position

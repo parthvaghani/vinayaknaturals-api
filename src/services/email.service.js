@@ -20,7 +20,7 @@ const buildTransporter = () => {
 
 const sendMail = async (options) => {
   const transporter = buildTransporter();
-  const from = config.email.from || 'no-reply@aavkar.com';
+  const from = config.email.from || 'venturedigitalindia@gmail.com';
   await transporter.sendMail({ from, ...options });
 };
 
@@ -73,8 +73,8 @@ const wrapMail = (content) => `
   <div style="font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111827;background:#d9ead3;padding:20px;">
     <div style="max-width:600px;margin:auto;background:#F5FFF6;padding:24px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
       <div style="text-align:center;margin-bottom:20px;">
-        <img src="https://aavkarmukhwas.github.io/images/aavkar-logo/logo.png" alt="Aavkar Mukhwas" style="height:60px;display:block;margin:0 auto 8px;"/>
-        <div style="font-size:1.25rem;font-weight:700;color:#257112;">Aavkar Mukhwas</div>
+        <img src="https://aavkarmukhwas.github.io/images/aavkar-logo/logo.png" alt="Drizzle Bites" style="height:60px;display:block;margin:0 auto 8px;"/>
+        <div style="font-size:1.25rem;font-weight:700;color:#257112;">Drizzle Bites</div>
       </div>
       ${content}
     </div>
@@ -101,8 +101,8 @@ const buildBuyerOrderHtml = (order, buyerName, couponDiscount) => {
     ${buildOrderTable(productRows, totals, total, couponDiscount)}
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-  Thank you for shopping with <strong>Aavkar Mukhwas</strong>.<br>
-  © ${new Date().getFullYear()} Aavkar Mukhwas. All rights reserved.
+  Thank you for shopping with <strong>Drizzle Bites</strong>.<br>
+  © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
 </p>
   `);
 };
@@ -273,8 +273,8 @@ const buildStatusUpdateHtml = (order, newStatus, buyerName, note = '', trackingD
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      Thank you for shopping with <strong>Aavkar Mukhwas</strong>.<br>
-      © ${new Date().getFullYear()} Aavkar Mukhwas. All rights reserved.
+      Thank you for shopping with <strong>Drizzle Bites</strong>.<br>
+      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
     </p>
   `);
 };
@@ -350,8 +350,8 @@ const buildPartnershipRequestHtml = (partnershipRequest) => {
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      This is an automated notification from <strong>Aavkar Mukhwas</strong>.<br>
-      © ${new Date().getFullYear()} Aavkar Mukhwas. All rights reserved.
+      This is an automated notification from <strong>Drizzle Bites</strong>.<br>
+      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
     </p>
   `);
 };
@@ -394,8 +394,8 @@ const buildBulkOrderHtml = (bulkOrder) => {
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      This is an automated notification from <strong>Aavkar Mukhwas</strong>.<br>
-      © ${new Date().getFullYear()} Aavkar Mukhwas. All rights reserved.
+      This is an automated notification from <strong>Drizzle Bites</strong>.<br>
+      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
     </p>
   `);
 };

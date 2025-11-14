@@ -3,7 +3,7 @@ const ProductCategory = require('../models/productCategory.model');
 const Product = require('../models/product.model');
 const data = require('./data.json');
 
-const MONGO_URI = 'mongodb+srv://aavkarmukhwas:w3J3gJfAHU5F5FeE@aavkarmukhwas.5if6yz2.mongodb.net/aavkar-development';
+const MONGO_URI = `${envVars.MONGODB_URL}drizzlebites-development`;
 
 const importData = async () => {
   try {
