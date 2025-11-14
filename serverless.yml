@@ -1,6 +1,6 @@
-org: aavkarmukhvas
-app: aavkarmukhvas
-service: aavkarmukhvas-service
+org: drizzlebites
+app: drizzlebites
+service: drizzlebites-service
 frameworkVersion: '3'
 
 provider:
