@@ -21,7 +21,7 @@ const generateBulkOrderSummaryPDF = async (bulkOrder) => {
     doc.setTextColor(...primaryGreen);
     doc.setFontSize(22);
     doc.setFont('helvetica', 'bold');
-    doc.text('Drizzle Bites', leftMargin, 25);
+    doc.text('Vinayak Naturals', leftMargin, 25);
 
     doc.setTextColor(...foregroundGreen);
     doc.setFontSize(10);

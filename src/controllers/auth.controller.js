@@ -10,7 +10,7 @@ const register = catchAsync(async (req, res) => {
     // try {
     //   const slackPayload = {
     //     channel: config.slack_channel,
-    //     username: 'Aavkar Backend',
+    //     username: 'Vinayak Naturals Backend',
     //     text: `New user registered => ${JSON.stringify(user)}`,
     //     icon_emoji: 'ghost',
     //   };

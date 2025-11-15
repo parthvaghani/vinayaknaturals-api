@@ -70,11 +70,11 @@ const buildProductRows = (order, trackTotals = { subtotal: 0, discount: 0 }) =>
 
 /* ---------- Common Layout Wrapper ---------- */
 const wrapMail = (content) => `
-  <div style="font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111827;background:#d9ead3;padding:20px;">
-    <div style="max-width:600px;margin:auto;background:#F5FFF6;padding:24px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+  <div style="font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#111827;background:#F2E4D8;padding:20px;">
+    <div style="max-width:600px;margin:auto;background:#FFF;padding:24px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,0.1);">
       <div style="text-align:center;margin-bottom:20px;">
-        <img src="https://aavkarmukhwas.github.io/images/aavkar-logo/logo.png" alt="Drizzle Bites" style="height:60px;display:block;margin:0 auto 8px;"/>
-        <div style="font-size:1.25rem;font-weight:700;color:#257112;">Drizzle Bites</div>
+        <img src="https://venturedigitalindia.github.io/images/vinayak-logo/logo.png" alt="Vinayak Naturals" style="height:60px;display:block;margin:0 auto 8px;"/>
+        <!-- <div style="font-size:1.25rem;font-weight:700;color:#8A4B23;">Vinayak Naturals</div> -->
       </div>
       ${content}
     </div>
@@ -101,8 +101,8 @@ const buildBuyerOrderHtml = (order, buyerName, couponDiscount) => {
     ${buildOrderTable(productRows, totals, total, couponDiscount)}
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-  Thank you for shopping with <strong>Drizzle Bites</strong>.<br>
-  © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
+  Thank you for shopping with <strong>Vinayak Naturals</strong>.<br>
+  © ${new Date().getFullYear()} Vinayak Naturals. All rights reserved.
 </p>
   `);
 };
@@ -139,7 +139,7 @@ const buildOrderTable = (rows, totals, total, couponDiscount) => {
   const couponRow = couponAmount > 0 ? `
     <tr>
       <td colspan="5" style="padding:10px;text-align:right;font-weight:bold;border:1px solid #e5e7eb;color:#16a34a;">Coupon Discount:</td>
-      <td style="padding:10px;border:1px solid #e5e7eb;color:#16a34a;">- ${formatMoney(couponAmount)}</td>
+      <td style="padding:10px;border:1px solid #e5e7eb;color:#8A4B23;">- ${formatMoney(couponAmount)}</td>
     </tr>` : '';
 
   return `
@@ -273,8 +273,8 @@ const buildStatusUpdateHtml = (order, newStatus, buyerName, note = '', trackingD
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      Thank you for shopping with <strong>Drizzle Bites</strong>.<br>
-      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
+      Thank you for shopping with <strong>Vinayak Naturals</strong>.<br>
+      © ${new Date().getFullYear()} Vinayak Naturals. All rights reserved.
     </p>
   `);
 };
@@ -350,8 +350,8 @@ const buildPartnershipRequestHtml = (partnershipRequest) => {
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      This is an automated notification from <strong>Drizzle Bites</strong>.<br>
-      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
+      This is an automated notification from <strong>Vinayak Naturals</strong>.<br>
+      © ${new Date().getFullYear()} Vinayak Naturals. All rights reserved.
     </p>
   `);
 };
@@ -394,8 +394,8 @@ const buildBulkOrderHtml = (bulkOrder) => {
     </div>
 
     <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
-      This is an automated notification from <strong>Drizzle Bites</strong>.<br>
-      © ${new Date().getFullYear()} Drizzle Bites. All rights reserved.
+      This is an automated notification from <strong>Vinayak Naturals</strong>.<br>
+      © ${new Date().getFullYear()} Vinayak Naturals. All rights reserved.
     </p>
   `);
 };
