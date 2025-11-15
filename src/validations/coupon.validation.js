@@ -63,6 +63,10 @@ const couponValidationSchema = Joi.object({
   isActive: Joi.boolean().default(true).messages({
     'boolean.base': 'isActive must be a boolean value',
   }),
+  couponType: Joi.string().valid('pos', 'normal').default('normal').messages({
+    'any.only': 'Coupon type must be either \'pos\' or \'normal\'',
+    'any.required': 'Coupon type is required',
+  }),
 });
 
 module.exports = { couponValidationSchema };

@@ -86,6 +86,11 @@ const couponSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    couponType: {
+      type: String,
+      enum: ['pos', 'normal'],
+      default: 'normal',
+    },
   },
   { timestamps: true }
 );

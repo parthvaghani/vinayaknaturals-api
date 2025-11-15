@@ -38,6 +38,13 @@ const getAllCoupons = async () => {
   });
 };
 
+const getAllPosCoupons = async () => {
+  return await Coupon.find({ couponType: 'pos' }).populate({
+    path: 'userType',
+    select: 'user_details email'
+  });
+};
+
 const getCouponById = async (id) => {
   return await Coupon.findById(id).populate('userType', 'name email');
 };
@@ -127,6 +134,7 @@ const applyCoupon = async ({ couponCode, userId, orderQuantity, cartValue, level
     throw new Error(`You have reached the maximum usage limit (${coupon.maxUsagePerUser}) for this coupon`);
   }
 
+
   if (coupon.type === 'unique' && (!userId || coupon.userType._id.toString() !== userId)) {
     throw new Error('This coupon is only valid for a specific user');
   }
@@ -163,6 +171,7 @@ const getCouponsForUser = async (userId) => {
     isActive: true,
     startDate: { $lte: now },
     expiryDate: { $gte: now },
+    couponType: 'normal'
   };
 
   // If not first order, exclude first-order-only coupons
@@ -223,5 +232,6 @@ module.exports = {
   updateCoupon,
   deleteCoupon,
   applyCoupon,
-  getCouponsForUser
+  getCouponsForUser,
+  getAllPosCoupons
 };

@@ -14,6 +14,15 @@ const createCoupon = async (req, res) => {
 };
 
 
+const getPosCoupons = async (req, res) => {
+  try {
+    const coupons = await couponService.getAllPosCoupons();
+    res.json({ success: true, data: coupons });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 const getCoupons = async (req, res) => {
   try {
     const coupons = await couponService.getAllCoupons();
@@ -109,5 +118,6 @@ module.exports = {
   updateCoupon,
   deleteCoupon,
   applyCoupon,
-  getUserCoupons
+  getUserCoupons,
+  getPosCoupons
 };
