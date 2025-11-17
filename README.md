@@ -1,4 +1,4 @@
-# RESTful API Node Server Finflex
+# RESTful API Node Server Vinayak Naturals 
 
 A project for quickly building RESTful APIs using Node.js, Express, and Mongoose.
 
