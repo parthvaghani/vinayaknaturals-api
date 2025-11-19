@@ -341,7 +341,7 @@ const createOrderFromCart = async ({ userId, addressId, phoneNumber, ReqBody, is
     const invoicePDFBuffer = await invoiceService.generateInvoicePDF(populatedOrder, buyerName, buyerEmail);
 
     // Send emails in parallel (non-blocking)
-    console.log('buyerEmail', buyerEmail);
+    // console.log('buyerEmail', buyerEmail);
     await Promise.allSettled([
       emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer, isNewAccount, resetToken),
       emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer),

@@ -196,7 +196,7 @@ const createGuestOrder = catchAsync(async (req, res) => {
   }
 
   // Check if user already exists by email
-  let existingUser = await User.findOne({
+  const existingUser = await User.findOne({
     email: email.toLowerCase()
   });
 
@@ -274,9 +274,7 @@ const createGuestOrder = catchAsync(async (req, res) => {
 
   return res.status(201).json({
     success: true,
-    message: isNewAccount
-      ? 'Order placed successfully! An account has been created for you. Check your email to set your password.'
-      : 'Order placed successfully!',
+    message: isNewAccount ? 'Order placed successfully! An account has been created for you. Check your email to set your password.' : 'Order placed successfully!',
     data: created,
     isNewAccount,
   });
