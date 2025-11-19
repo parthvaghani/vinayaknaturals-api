@@ -15,7 +15,7 @@ const createUser = async (userBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Phone number already taken!');
   }
   if (userBody.email && (await User.isEmailTaken(userBody.email))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken if in case you forgot your password, please reset your password');
   }
   // Assign permissions for admin based on userType
   if (userBody.role === 'admin' && userBody.userType) {
@@ -36,7 +36,7 @@ const createNewUser = async (userBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Phone number already taken!');
   }
   if (await User.isEmailTaken(userBody.email)) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken if in case you forgot your password, please reset your password');
   }
   userBody.authMethods = [{ method: userBody.authMethod, phoneNumber: userBody.phoneNumber }];
   // Assign permissions for admin based on userType

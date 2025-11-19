@@ -45,7 +45,7 @@ const register = {
     user_details: Joi.object({
       name: Joi.string().trim().required(),
       country: Joi.string().trim().required(),
-      gender: Joi.string().valid('Male', 'Female', 'Other').required(),
+      gender: Joi.string().valid('Male', 'Female', 'Other').optional(),
     }).required(),
     acceptedTerms: Joi.boolean().default(false),
     role: Joi.string().valid('user', 'admin').default('user'),

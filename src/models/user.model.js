@@ -32,8 +32,15 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       trim: true,
-      minlength: 8,
       validate(value) {
+        // Allow empty password for guest users
+        if (value === '') {
+          return true;
+        }
+        // For non-empty passwords, enforce validation rules
+        if (value.length < 8) {
+          throw new Error('Password must be at least 8 characters long');
+        }
         if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
           throw new Error('Password must contain at least one letter and one number');
         }
@@ -153,7 +160,8 @@ userSchema.methods.isPasswordMatch = async function (password) {
 
 // Encrypt password before saving
 userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+  if (this.isModified('password') && this.password !== '') {
+    // Only hash non-empty passwords (skip for guest users)
     this.password = await bcrypt.hash(this.password, 8);
   }
   next();

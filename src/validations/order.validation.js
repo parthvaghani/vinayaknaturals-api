@@ -1,6 +1,26 @@
 const Joi = require('joi');
 const { objectId } = require('./custom.validation');
 
+// Phone validation for guest orders
+const phoneValidation = (value, helpers) => {
+  const cleanNumber = value.replace(/[^\d+]/g, '');
+  if (!cleanNumber.startsWith('+')) {
+    return helpers.error('string.pattern.base', { message: 'Phone number must start with + followed by country code' });
+  }
+  if (cleanNumber.length < 3) {
+    return helpers.error('string.pattern.base', { message: 'Phone number must include country code after +' });
+  }
+  if (cleanNumber.length < 8 || cleanNumber.length > 16) {
+    return helpers.error('string.pattern.base', {
+      message: 'Phone number must be between 8 and 16 digits including country code',
+    });
+  }
+  if (!/^\+\d+$/.test(cleanNumber)) {
+    return helpers.error('string.pattern.base', { message: 'Phone number can only contain digits after +' });
+  }
+  return cleanNumber;
+};
+
 const createOrder = {
   params: Joi.object().keys({
     id: Joi.string().custom(objectId).required(),
@@ -118,6 +138,53 @@ const createPosOrder = {
   }),
 };
 
+const createGuestOrder = {
+  body: Joi.object().keys({
+    name: Joi.string().trim().required().messages({
+      'string.empty': 'Name is required',
+      'any.required': 'Name is required',
+    }),
+    email: Joi.string().trim().email().required().messages({
+      'string.empty': 'Email is required',
+      'any.required': 'Email is required',
+      'string.email': 'Please provide a valid email address',
+    }),
+    phoneNumber: Joi.string().custom(phoneValidation).required().messages({
+      'string.empty': 'Phone number is required',
+      'any.required': 'Phone number is required',
+      'string.pattern.base': '{{#message}}',
+    }),
+    address: Joi.object()
+      .keys({
+        addressLine1: Joi.string().required(),
+        addressLine2: Joi.string().allow('').optional(),
+        city: Joi.string().required(),
+        state: Joi.string().required(),
+        zip: Joi.string().required(),
+        country: Joi.string().default('IND'),
+      })
+      .required(),
+    cart: Joi.array()
+      .items(
+        Joi.object().keys({
+          productId: Joi.string().custom(objectId).required(),
+          weightVariant: Joi.string().required(),
+          weight: Joi.string().required(),
+          totalProduct: Joi.number().required(),
+        }),
+      )
+      .min(1)
+      .required(),
+    couponId: Joi.string().custom(objectId).optional(),
+    discountAmount: Joi.number().default(0),
+    discountPercentage: Joi.number().default(0),
+    acceptedTerms: Joi.boolean().valid(true).required().messages({
+      'any.only': 'You must accept the Terms and Conditions',
+      'any.required': 'You must accept the Terms and Conditions',
+    }),
+  }),
+};
+
 module.exports = {
   createOrder,
   getOrderById,
@@ -127,4 +194,5 @@ module.exports = {
   updateOrder,
   downloadInvoice,
   createPosOrder,
+  createGuestOrder,
 };

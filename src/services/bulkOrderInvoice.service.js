@@ -108,7 +108,7 @@ const generateBulkOrderSummaryPDF = async (bulkOrder) => {
     doc.setTextColor(...textGray);
     doc.setFontSize(8);
     doc.text('This is a bulk order inquiry. Our team will contact you with pricing details.', pageWidth / 2, pageHeight - 25, { align: 'center' });
-    doc.text('Plot No 26, Swastik Raw House, Near Shivdhara Circle, D Mart Road, Mota Varachha, Surat 394101 Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
+    doc.text('217 Valamnagar Soc, Simada Gam, Nana Varachha, Surat, Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
     doc.text('Phone: +91 81288 26764 | Email: venturedigitalindia@gmail.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
 
     // eslint-disable-next-line no-undef

@@ -82,15 +82,33 @@ const wrapMail = (content) => `
 
 
 /* ---------- Buyer HTML ---------- */
-const buildBuyerOrderHtml = (order, buyerName, couponDiscount) => {
+const buildBuyerOrderHtml = (order, buyerName, couponDiscount, isNewAccount = false, buyerEmail = '', resetToken = '') => {
   const totals = { subtotal: 0, discount: 0 };
   const productRows = buildProductRows(order, totals);
   const total = totals.subtotal - totals.discount;
 
+  // New account welcome section
+  const newAccountSection = isNewAccount && resetToken ? `
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;margin-bottom:20px;">
+      <h3 style="color:#16a34a;margin:0 0 12px 0;">🎉 Welcome to Vinayak Naturals!</h3>
+      <p style="margin:0 0 12px 0;">An account has been created for you to make future orders easier.</p>
+      <p style="margin:0 0 12px 0;">To set your password and access your account, click the button below:</p>
+      <div style="text-align:center;">
+        <a href="${config.frontEndBaseUrl}/auth/reset-password?token=${resetToken}"
+           style="display:inline-block;background:#16a34a;color:#fff;padding:12px 24px;text-decoration:none;border-radius:6px;font-weight:600;">
+          Set Your Password
+        </a>
+      </div>
+      <p style="margin:12px 0 0 0;font-size:12px;color:#6b7280;">Or copy this link: ${config.frontEndBaseUrl}/auth/reset-password?token=${resetToken}</p>
+      <p style="margin:12px 0 0 0;font-size:12px;color:#dc2626;"><strong>⚠️ Note:</strong> This link will expire in 10 minutes for security purposes.</p>
+    </div>
+  ` : '';
+
   return wrapMail(`
-    <h2 style="text-align:center;">Your order has been placed successfully</h2>
+    <h2 style="text-align:center;">${isNewAccount && resetToken ? '🎉 Welcome & Order Confirmation' : 'Your order has been placed successfully'}</h2>
     <p>Hi ${buyerName || 'Customer'},</p>
     <p>Thanks for your purchase! Your order has been placed successfully.</p>
+    ${newAccountSection}
     <p><strong>Order ID:</strong> ${order?._id || ''}<br/>
     <strong>Order Date:</strong> ${formatDate(order?.createdAt)}</p>
 
@@ -176,14 +194,14 @@ const buildOrderTable = (rows, totals, total, couponDiscount) => {
 };
 
 
-const sendOrderPlacedEmailForBuyer = async (buyerEmail, order, buyerName, couponDiscount, invoicePDFBuffer) => {
+const sendOrderPlacedEmailForBuyer = async (buyerEmail, order, buyerName, couponDiscount, invoicePDFBuffer, isNewAccount = false, resetToken = '') => {
   if (!buyerEmail) return;
   try {
     const mailOptions = {
       to: buyerEmail,
-      subject: 'Your order has been placed successfully',
+      subject: isNewAccount ? 'Welcome to Vinayak Naturals - Order Confirmation' : 'Your order has been placed successfully',
       text: formatOrderSummary(order, couponDiscount),
-      html: buildBuyerOrderHtml(order, buyerName, couponDiscount),
+      html: buildBuyerOrderHtml(order, buyerName, couponDiscount, isNewAccount, buyerEmail, resetToken),
     };
 
     // Add PDF attachment if provided
@@ -413,6 +431,56 @@ const sendBulkOrderEmailForSeller = async (bulkOrder) => {
   }
 };
 
+/* ---------- Reset Password Email ---------- */
+const buildResetPasswordHtml = (resetLink) => {
+  return wrapMail(`
+    <h2 style="text-align:center;">🔒 Reset Your Password</h2>
+    <p>Hi there,</p>
+    <p>You recently requested to reset your password for your Vinayak Naturals account. Click the button below to reset it.</p>
+
+    <div style="text-align:center;margin:30px 0;">
+      <a href="${resetLink}"
+         style="display:inline-block;background:#8A4B23;color:#fff;padding:14px 32px;text-decoration:none;border-radius:8px;font-weight:600;font-size:16px;">
+        Reset Password
+      </a>
+    </div>
+
+    <p style="font-size:14px;color:#6b7280;">Or copy and paste this link into your browser:</p>
+    <p style="font-size:14px;word-break:break-all;background:#f3f4f6;padding:12px;border-radius:6px;">
+      ${resetLink}
+    </p>
+
+    <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:15px;margin:20px 0;">
+      <p style="margin:0;font-size:14px;color:#856404;">
+        <strong>⚠️ Security Notice:</strong> This password reset link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.
+      </p>
+    </div>
+
+    <p style="text-align:center;font-size:12px;color:#6b7280;margin-top:20px;">
+      Thank you for choosing <strong>Vinayak Naturals</strong>.<br>
+      © ${new Date().getFullYear()} Vinayak Naturals. All rights reserved.
+    </p>
+  `);
+};
+
+const sendResetPasswordEmail = async (email, token, role = 'user') => {
+  try {
+    // Determine the correct frontend URL based on role
+    const baseUrl = role === 'admin' ? config.frontEndBaseUrlAdmin : config.frontEndBaseUrl;
+    const resetLink = `${baseUrl}/auth/reset-password?token=${token}`;
+
+    await sendMail({
+      to: email,
+      subject: 'Reset Your Vinayak Naturals Password',
+      text: `Reset your password by visiting: ${resetLink}\n\nThis link will expire in 10 minutes. If you didn't request this, you can safely ignore this email.`,
+      html: buildResetPasswordHtml(resetLink),
+    });
+  } catch (err) {
+    logger.error('Failed to send reset password email', err);
+    throw err;
+  }
+};
+
 module.exports = {
   sendOrderPlacedEmailForBuyer,
   sendOrderPlacedEmailForSeller,
@@ -420,4 +488,5 @@ module.exports = {
   sendOrderStatusUpdateEmailForSeller,
   sendPartnershipRequestEmailForSeller,
   sendBulkOrderEmailForSeller,
+  sendResetPasswordEmail,
 };

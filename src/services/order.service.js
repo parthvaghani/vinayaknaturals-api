@@ -237,7 +237,7 @@ const getAllOrders = async (query = {}) => {
 //   return { orderDoc, ReqBody };
 // };
 
-const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
+const createOrderFromCart = async ({ userId, addressId, phoneNumber, ReqBody, isGuestOrder = false, isNewAccount = false, resetToken = null }) => {
   const address = await Address.findOne({ _id: addressId, userId });
   if (!address) {
     const error = new Error('Address not found');
@@ -273,8 +273,12 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
     };
   }));
 
-  const user = await User.findById(userId).select('phoneNumber');
-  const phoneNumber = user && user.phoneNumber ? user.phoneNumber : '';
+  // Use provided phoneNumber for guest orders, otherwise fetch from user
+  let finalPhoneNumber = phoneNumber;
+  if (!finalPhoneNumber) {
+    const user = await User.findById(userId).select('phoneNumber');
+    finalPhoneNumber = user && user.phoneNumber ? user.phoneNumber : '';
+  }
   const orderDoc = await Order.create({
     userId,
     address: {
@@ -286,7 +290,7 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
       country: address.country || 'IND',
     },
     productsDetails,
-    phoneNumber,
+    phoneNumber: finalPhoneNumber,
     applyCoupon: {
       couponId: ReqBody.couponId,
       discountAmount: ReqBody.discountAmount,
@@ -337,8 +341,9 @@ const createOrderFromCart = async ({ userId, addressId, ReqBody }) => {
     const invoicePDFBuffer = await invoiceService.generateInvoicePDF(populatedOrder, buyerName, buyerEmail);
 
     // Send emails in parallel (non-blocking)
+    console.log('buyerEmail', buyerEmail);
     await Promise.allSettled([
-      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer),
+      emailService.sendOrderPlacedEmailForBuyer(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer, isNewAccount, resetToken),
       emailService.sendOrderPlacedEmailForSeller(buyerEmail, populatedOrder, buyerName, ReqBody.discountAmount, invoicePDFBuffer),
     ]);
   } catch (error) {

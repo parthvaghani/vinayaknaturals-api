@@ -211,7 +211,7 @@ const generateInvoicePDF = async (order, buyerName, buyerEmail) => {
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
       doc.text('Thank you for shopping with Vinayak Naturals!', pageWidth / 2, pageHeight - 25, { align: 'center' });
-      doc.text('Plot No 26, Swastik Raw House, Near Shivdhara Circle, D Mart Road, Mota Varachha, Surat 394101 Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
+      doc.text('217 Valamnagar Soc, Simada Gam, Nana Varachha, Surat, Gujarat', pageWidth / 2, pageHeight - 20, { align: 'center' });
       doc.text('Phone: +91 81288 26764 | Email: venturedigitalindia@gmail.com', pageWidth / 2, pageHeight - 15, { align: 'center' });
       doc.setTextColor(...primaryBrown);
       doc.setFontSize(7);

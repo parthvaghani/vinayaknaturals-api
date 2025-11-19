@@ -70,6 +70,55 @@ const loginUserWithEmailAndPassword = async (emailOrUsername, password) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, error.message || 'Authentication failed');
   }
 };
+
+/**
+ * Check email and send reset password link if guest user
+ * @param {string} email
+ * @returns {Promise<Object>}
+ */
+const checkEmailAndSendResetIfGuest = async (email) => {
+  if (!email || !validator.isEmail(email)) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Please provide a valid email');
+  }
+
+  try {
+    // Find user by email
+    const user = await userService.getUserByEmail(email);
+
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'No account found with this email try to register first');
+    }
+
+    if (!user.isActive) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'Your account has been deactivated. Please contact support.');
+    }
+
+    // Check if user is a guest (password is empty)
+    if (!user.password || user.password === '') {
+      // Generate reset password token
+      const resetPasswordToken = await tokenService.generateResetPasswordToken(email);
+
+      // Send reset password email
+      await emailService.sendResetPasswordEmail(email, resetPasswordToken);
+
+      return {
+        success: true,
+        isGuest: true,
+        message: 'A password setup link has been sent to your email. Please check your inbox to set your password.',
+      };
+    }
+
+    // User has password, they need to enter it
+    return {
+      success: true,
+      isGuest: false,
+      message: 'Please enter your password to continue',
+    };
+  } catch (error) {
+    throw new ApiError(error.statusCode || httpStatus.INTERNAL_SERVER_ERROR, error.message || 'Something went wrong');
+  }
+};
+
 /**
  * Login with username and password
  * @param {string} email
@@ -81,7 +130,7 @@ const loginUserWithEmailAndPassword = async (emailOrUsername, password) => {
 
 const checkUser = async (userBody) => {
   if (userBody.email && (await User.isEmailTaken(userBody.email))) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken if in case you forgot your password, please reset your password');
   }
   if (userBody.phoneNumber && (await User.isPhoneNumberTaken(userBody.phoneNumber))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'PhoneNumber already taken!');
@@ -370,4 +419,5 @@ module.exports = {
   verifyOTPByPhone,
   changePassword,
   generateFinFlexKeys,
+  checkEmailAndSendResetIfGuest,
 };

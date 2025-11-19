@@ -3,7 +3,10 @@ const service = require('../services/order.service');
 const ApiError = require('../utils/ApiError');
 const httpStatus = require('http-status');
 const productCategoryModel = require('../models/productCategory.model');
-const { productService } = require('../services');
+const { productService, tokenService } = require('../services');
+const User = require('../models/user.model');
+const Address = require('../models/address.model');
+const crypto = require('crypto');
 
 const getAllOrders = catchAsync(async (req, res) => {
   const userRole = req.user && req.user.role;
@@ -173,6 +176,112 @@ const createPosOrder = catchAsync(async (req, res) => {
   return res.status(201).json({ success: true, message: 'POS Order placed successfully', data: created });
 });
 
+const createGuestOrder = catchAsync(async (req, res) => {
+  const { name, email, phoneNumber, address, cart, couponId, discountAmount, discountPercentage } = req.body;
+
+  // Validate cart is not empty
+  if (cart.length === 0) {
+    return res.status(400).json({ success: false, message: 'Cart is empty' });
+  }
+
+  // Validate all products exist
+  for (const item of cart) {
+    const findProduct = await productService.getProductById(item?.productId);
+    if (!findProduct) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product not found',
+      });
+    }
+  }
+
+  // Check if user already exists by email
+  let existingUser = await User.findOne({
+    email: email.toLowerCase()
+  });
+
+  // Check if phone number already exists
+  // let existingPhoneUser = await User.findOne({
+  //   phoneNumber: phoneNumber
+  // });
+
+  // if (existingPhoneUser) {
+  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Phone number already taken!');
+  // }
+
+  let userId;
+  let isNewAccount = false;
+  let resetToken = null;
+
+  // If user doesn't exist, create a new account with empty password (guest user)
+  if (!existingUser) {
+    const newUser = await User.create({
+      email: email.toLowerCase(),
+      phoneNumber,
+      password: '', // Empty password for guest users
+      user_details: {
+        name,
+        country: address.country || 'IND',
+      },
+      acceptedTerms: true,
+      role: 'user',
+      isActive: true,
+      profileCompleted: false,
+    });
+
+    userId = newUser._id;
+    isNewAccount = true;
+
+    // Generate reset password token for new account
+    resetToken = await tokenService.generateResetPasswordToken(email.toLowerCase());
+  } else {
+    // User exists - use existing account for order
+    userId = existingUser._id;
+    isNewAccount = false;
+  }
+
+  // Create address and link to user
+  const newAddress = await Address.create({
+    userId,
+    addressLine1: address.addressLine1,
+    addressLine2: address.addressLine2 || '',
+    city: address.city,
+    state: address.state,
+    zip: address.zip,
+    country: address.country || 'IND',
+    isDefault: true,
+    label: 'Home',
+  });
+
+  // Prepare order data
+  const ReqBody = {
+    cart,
+    couponId,
+    discountAmount: discountAmount || 0,
+    discountPercentage: discountPercentage || 0,
+  };
+
+  // Create order using the service
+  const created = await service.createOrderFromCart({
+    userId,
+    addressId: newAddress._id,
+    phoneNumber,
+    ReqBody,
+    isGuestOrder: true,
+    isNewAccount,
+    resetToken,
+  });
+
+  return res.status(201).json({
+    success: true,
+    message: isNewAccount
+      ? 'Order placed successfully! An account has been created for you. Check your email to set your password.'
+      : 'Order placed successfully!',
+    data: created,
+    isNewAccount,
+  });
+});
+
 module.exports = {
   getAllOrders,
   createOrder,
@@ -183,4 +292,5 @@ module.exports = {
   updateOrder,
   downloadInvoice,
   createPosOrder,
+  createGuestOrder,
 };

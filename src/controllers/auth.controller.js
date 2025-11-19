@@ -62,6 +62,17 @@ const checkUserController = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).send(result);
 });
 
+const checkEmailForLogin = catchAsync(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Please provide email');
+  }
+
+  const result = await authService.checkEmailAndSendResetIfGuest(email);
+  return res.status(httpStatus.OK).send(result);
+});
+
 const login = catchAsync(async (req, res) => {
   const { emailOrUsername, password } = req.body;
 
@@ -138,4 +149,5 @@ module.exports = {
   registerUser,
   changePassword,
   checkUserController,
+  checkEmailForLogin,
 };
