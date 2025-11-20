@@ -86,7 +86,7 @@ const checkEmailAndSendResetIfGuest = async (email) => {
     const user = await userService.getUserByEmail(email);
 
     if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'No account found with this email try to register first');
+      throw new ApiError(httpStatus.NOT_FOUND, 'User Not Registered');
     }
 
     if (!user.isActive) {
@@ -253,7 +253,7 @@ const resetPassword = async (resetPasswordToken, newPassword) => {
 const changePassword = async (userId, oldPassword, newPassword) => {
   const user = await User.findById(userId);
   if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    throw new ApiError(httpStatus.NOT_FOUND, 'User Not Registered');
   }
   const isMatch = await user.isPasswordMatch(oldPassword);
   if (!isMatch) {
